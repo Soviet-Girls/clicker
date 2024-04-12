@@ -45,7 +45,11 @@ async def generate_play_message(user_id: int) -> str:
     score = await data.get_score(user_id)
     score = "{:,}".format(score).replace(",", " ")
     bot_message = f"💰 Твой счёт: {score} SG₽"
-    bot_message += "\n\n⌛ Добыча доступна каждую секунду."
+    sleep_time = data.get_sleep_time()
+    if sleep_time == 0:
+        bot_message += "\n\n⌛ Добыча доступна каждую секунду."
+    else:
+        bot_message += f"\n\n⌛ Высокая нагрузка! Добыча доступна каждые {sleep_time} секунд."
     wallet = await data.get_wallet(user_id)
     if wallet == "":
         bot_message += "\n\n⚠️ Кошелек Polygon не указан! Отправьте адрес кошелька боту, чтобы получить SG₽ после закрытия игры."
@@ -173,7 +177,9 @@ async def mine_message(event: MessageEvent):
                 elif new_cpc < 1:
                     new_cpc = 1
                 cpc += new_cpc
-        # await asyncio.sleep(6)
+        sleep_time = data.get_sleep_time()
+        if sleep_time > 0:
+            await asyncio.sleep(sleep_time)
         await data.change_score(user_id, cpc)
         await data.set_last_mine(user_id, tm)
     except Exception as e:
@@ -331,6 +337,14 @@ async def bonus_message(message: Message):
         message=f"🎉 Вы получили бонус в размере {bonus} SG₽!",
         random_id=random.randint(0, 2 ** 64)
     )
+
+@bot.on.message(CommandRule(["/sleep"]))
+async def sleep_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    sleep_time = int(message.text.split()[1])
+    data.set_sleep_time(sleep_time)
+    await message.answer(f"💤 Установлено время сна {sleep_time} сек")
 
 
 @bot.loop_wrapper.interval(minutes=5)

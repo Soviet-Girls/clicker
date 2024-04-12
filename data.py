@@ -2,6 +2,7 @@ import asyncio
 from bot import bot
 
 ver = "0"
+sleep_time = 0
 
 scores = {}
 async def save_scores() -> None:
@@ -204,3 +205,13 @@ async def get_invite_bonus(user_id: int) -> int:
 
 async def set_invite_bonus(user_id: int, invite_bonus: bool) -> None:
     await bot.api.storage.set("invite_bonus"+ver, value=str(invite_bonus), user_id=user_id)
+
+
+# sleep time
+
+def get_sleep_time() -> int:
+    return sleep_time
+
+def set_sleep_time(new_sleep_time: int):
+    global sleep_time
+    sleep_time = new_sleep_time
