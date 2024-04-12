@@ -47,7 +47,7 @@ async def generate_code():
             }] for user in users
             ]
     }
-    return widget
+    return f"return {widget};"
 
 async def update():
     code = await generate_code()
