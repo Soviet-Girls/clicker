@@ -1,5 +1,5 @@
 import data
-from vkbottle import Keyboard, OpenLink, Callback
+from vkbottle import Keyboard, OpenLink, Callback, VKPay
 
 def get_play_keyboard():
     keyboard = Keyboard(inline=True)
@@ -28,4 +28,9 @@ async def get_upgrades_keyboard(user_id: int):
     if automine_status is False:
         keyboard.row()
         keyboard.add(Callback("🤖 Автодобыча, 5000 SG₽", payload={"command": "upgrade_automine"}))
+    return keyboard
+
+def get_pay_keyboard():
+    keyboard = Keyboard(inline=True)
+    keyboard.add(VKPay(action=f"transfer-{225507433}", hash="action=transfer-to-group&group_id=225507433&aid=1"))
     return keyboard

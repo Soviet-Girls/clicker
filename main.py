@@ -322,6 +322,11 @@ async def like_remove_handler(event):
         pass
 
 # Обработка VK Pay
+@bot.on.message(CommandRule(["/vkpay"]))
+async def vkpay_message(message: Message):
+    _kb = keyboard.get_pay_keyboard()
+    await message.answer("🎉 Поддержать проект можно на VK Pay", keyboard=_kb)
+
 @bot.on.raw_event(GroupEventType.VKPAY_TRANSACTION)
 async def vkpay_transaction_handler(event):
     user_id = event['object']['from_id']
