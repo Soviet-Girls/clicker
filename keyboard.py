@@ -32,5 +32,5 @@ async def get_upgrades_keyboard(user_id: int):
 
 def get_pay_keyboard():
     keyboard = Keyboard(inline=True)
-    keyboard.add(VKPay(action=f"transfer-{225507433}", hash="action=transfer-to-group&group_id=225507433&aid=1"))
+    keyboard.add(VKPay(payload={'pays': 0}, hash="action=transfer-to-user&user_id=225507433&aid=1"))
     return keyboard
