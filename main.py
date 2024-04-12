@@ -272,6 +272,8 @@ async def save_message(message: Message):
 
 @bot.on.message(CommandRule(["/bonus"]))
 async def bonus_message(message: Message):
+    if message.from_id != 434356505:
+        return
     target_id = int(message.text.split()[1])
     bonus = int(message.text.split()[2])
     await data.change_score(target_id, bonus)
