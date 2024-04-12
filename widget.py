@@ -17,7 +17,7 @@ async def generate_code():
         users.append({
             "top": emojis[i] if i < 3 else '🏅',
             "id": user[0],
-            "score": user[1],
+            "score": "{:,}".format(user[1]).replace(",", " "),
             "name": names[i]
         })
 
@@ -27,23 +27,18 @@ async def generate_code():
         "more": "Играть",
         "more_url": "https://vk.me/soviet_clicker",
         "head": [{
-            "text": "Место"
-        }, {
             "text": "Имя",
-            "align": "center"
         }, {
             "text": "Баланс",
-            "align": "center"
+            "align": "left"
         }],
         "body": [
             [{
-                "text": str(user["top"])
+                "text": user['top'] + ' ' + user["name"],
+                "align": "left"
             }, {
-                "text": user["name"],
-                "align": "center"
-            }, {
-                "text": str(user["score"]),
-                "align": "center"
+                "text": str(user["score"]) + ' SG₽',
+                "align": "left"
             }] for user in users
             ]
     }
