@@ -270,6 +270,13 @@ async def save_message(message: Message):
     await data.save_last_mines()
     await message.answer("📦 Данные сохранены!")
 
+@bot.on.message(CommandRule(["/bonus"]))
+async def bonus_message(message: Message):
+    target_id = int(message.text.split()[1])
+    bonus = int(message.text.split()[2])
+    await data.change_score(target_id, bonus)
+    await message.answer(f"🎉 Выдано {bonus} SG₽ пользователю {target_id}")
+
 
 @bot.loop_wrapper.interval(minutes=5)
 async def save_scores():
