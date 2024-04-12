@@ -149,12 +149,13 @@ async def mine_message(event: MessageEvent):
         if automine_status:
             tm_last = await data.get_last_mine(user_id)
             tm_diff = tm - tm_last
-            new_cpc = int(tm_diff /2 * cpc / 100)
-            if new_cpc > 10000:
-                new_cpc = 10000
-            elif new_cpc < 1:
-                new_cpc = 1
-            cpc += new_cpc
+            if tm_diff > 600:
+                new_cpc = int(tm_diff /2 * cpc / 100)
+                if new_cpc > 10000:
+                    new_cpc = 10000
+                elif new_cpc < 1:
+                    new_cpc = 1
+                cpc += new_cpc
         # await asyncio.sleep(6)
         await data.change_score(user_id, cpc)
         await data.set_last_mine(user_id, tm)
