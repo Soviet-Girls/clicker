@@ -41,8 +41,8 @@ top = []
 
 async def check_top() -> None:
     global top
-    scores = {k: int(v) for k, v in scores.items()}
-    top = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
+    scores_data = {k: int(v) for k, v in scores.items()}
+    top = sorted(scores_data.items(), key=lambda x: x[1], reverse=True)[:5]
     if len(top) < 5:
         _top = await bot.api.storage.get("top"+ver, user_id=1)
         if _top != "":
