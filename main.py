@@ -320,7 +320,7 @@ async def like_remove_handler(event):
 async def vkpay_transaction_handler(event):
     user_id = event['object']['from_id']
     amount = event['object']['amount']
-    await data.change_score(user_id, amount)
+    await data.change_score(user_id, amount*1000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
@@ -328,7 +328,7 @@ async def vkpay_transaction_handler(event):
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
-        pass
+        raise e
 
 @bot.on.message(WalletRule())
 async def wallet_message(message: Message):
