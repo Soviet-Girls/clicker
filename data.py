@@ -57,7 +57,7 @@ async def save_top() -> None:
     _i = 0
     while True:
         try:
-            await bot.api.storage.set("top"+ver, value=str(top))
+            await bot.api.storage.set("top"+ver, user_id=1, value=str(top))
             print("Top saved")
             break
         except Exception as e:
