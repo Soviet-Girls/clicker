@@ -222,9 +222,9 @@ async def callback_handler(event: MessageEvent):
 
 # Обработка вступления в группу
 @bot.on.raw_event(GroupEventType.GROUP_JOIN)
-async def group_join_handler(event: MessageEvent):
+async def group_join_handler(event):
     # Даём бонус за вступление в группу
-    user_id = event.object.user_id
+    user_id = event['object']['user_id']
     bonus = await data.get_invite_bonus(user_id)
     if bonus is False:
         await data.change_score(user_id, 1000)
@@ -240,8 +240,8 @@ async def group_join_handler(event: MessageEvent):
 
 # Обработка выхода из группы
 @bot.on.raw_event(GroupEventType.GROUP_LEAVE)
-async def group_leave_handler(event: MessageEvent):
-    user_id = event.object.user_id
+async def group_leave_handler(event):
+    user_id = event['object']['user_id']
     bonus = await data.get_invite_bonus(user_id)
     if bonus is True:
         await data.set_invite_bonus(user_id, False)
