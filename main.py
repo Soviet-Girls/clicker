@@ -315,6 +315,21 @@ async def like_remove_handler(event):
     except Exception as e:
         pass
 
+# Обработка VK Pay
+@bot.on.raw_event(GroupEventType.VKPAY_TRANSACTION)
+async def vkpay_transaction_handler(event):
+    user_id = event['object']['from_id']
+    amount = event['object']['amount']
+    await data.change_score(user_id, amount)
+    try:
+        await bot.api.messages.send(
+            user_id=user_id,
+            message=f"🎉 Вы получили {amount*1000} SG₽!",
+            random_id=random.randint(0, 2 ** 64)
+        )
+    except Exception as e:
+        pass
+
 @bot.on.message(WalletRule())
 async def wallet_message(message: Message):
     await data.set_wallet(message.from_id, message.text)
