@@ -14,6 +14,7 @@ def get_main_keyboard():
     keyboard.row()
     keyboard.add(Callback("👥 Пригласить", payload={"command": "ref"}))
     keyboard.add(Callback("🔝 Топ игроков", payload={"command": "top"}))
+    keyboard.row()
     keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/wall-225507433_2"))
     return keyboard
 
