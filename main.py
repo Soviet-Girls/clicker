@@ -326,6 +326,11 @@ async def bonus_message(message: Message):
     bonus = int(message.text.split()[2])
     await data.change_score(target_id, bonus)
     await message.answer(f"🎉 Выдано {bonus} SG₽ пользователю {target_id}")
+    await bot.api.messages.send(
+        user_id=target_id,
+        message=f"🎉 Вы получили бонус в размере {bonus} SG₽!",
+        random_id=random.randint(0, 2 ** 64)
+    )
 
 
 @bot.loop_wrapper.interval(minutes=5)
