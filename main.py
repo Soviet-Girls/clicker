@@ -275,6 +275,33 @@ async def group_leave_handler(event):
     except Exception as e:
         pass
 
+# Обработка лайка
+@bot.on.raw_event(GroupEventType.LIKE_ADD)
+async def like_add_handler(event):
+    user_id = event['object']['liker_id']
+    await data.change_score(user_id, 500)
+    try:
+        await bot.api.messages.send(
+            user_id=user_id,
+            message="🎉 Вы получили 500 SG₽ за лайк!",
+            random_id=random.randint(0, 2 ** 64)
+        )
+    except Exception as e:
+        pass
+
+# Обработка снятия лайка
+@bot.on.raw_event(GroupEventType.LIKE_REMOVE)
+async def like_remove_handler(event):
+    user_id = event['object']['unliker_id']
+    await data.change_score(user_id, -500)
+    try:
+        await bot.api.messages.send(
+            user_id=user_id,
+            message="😢 Вы потеряли 500 SG₽ за снятие лайка!",
+            random_id=random.randint(0, 2 ** 64)
+        )
+    except Exception as e:
+        pass
 
 @bot.on.message(WalletRule())
 async def wallet_message(message: Message):
