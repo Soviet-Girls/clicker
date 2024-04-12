@@ -280,6 +280,18 @@ async def bonus_message(message: Message):
     await data.change_score(target_id, bonus)
     await message.answer(f"🎉 Выдано {bonus} SG₽ пользователю {target_id}")
 
+@bot.on.message(CommandRule(["/top"]))
+async def top_message(message: Message):
+    top = await data.get_top()
+    bot_message = "🏆 Топ 5:\n\n"
+    for i, user in enumerate(top):
+        score = "{:,}".format(user[1]).replace(",", " ")
+        user = await bot.api.users.get(user_ids=user[0])
+        user = user[0]
+        name = user.first_name + " " + user.last_name[0] + "."
+        bot_message += f"{i+1}. {name} - {score} SG₽\n"
+    await message.answer(bot_message)
+
 
 @bot.loop_wrapper.interval(minutes=5)
 async def save_scores():
