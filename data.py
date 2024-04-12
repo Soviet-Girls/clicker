@@ -36,6 +36,37 @@ async def save_last_mines() -> None:
                     break
 
 
+# топ 5 игроков (пары [user_id, score])
+top = []
+
+async def check_top() -> None:
+    global top
+    top = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:5]
+    if len(top) < 5:
+        _top = await bot.api.storage.get("top"+ver)
+        if _top != "":
+            top = eval(_top[0].value)
+
+async def get_top() -> list:
+    if len(top) < 5:
+        await check_top()
+    return top
+
+async def save_top() -> None:
+    await check_top()
+    _i = 0
+    while True:
+        try:
+            await bot.api.storage.set("top"+ver, value=str(top))
+            print("Top saved")
+            break
+        except Exception as e:
+            print(f"Error saving top: {e}")
+            asyncio.sleep(1)
+            _i += 1
+            if _i > 5:
+                break
+
 pricing = [
     [15, 2],
     [100, 5],

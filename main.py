@@ -285,5 +285,6 @@ async def bonus_message(message: Message):
 async def save_scores():
     await data.save_scores()
     await data.save_last_mines()
+    await data.save_top()
 
 bot.run_forever()
