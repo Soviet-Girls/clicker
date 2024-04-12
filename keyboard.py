@@ -13,7 +13,7 @@ def get_main_keyboard():
     keyboard.add(Callback("🛍️ Улучшения", payload={"command": "upgrades"}))
     keyboard.row()
     keyboard.add(Callback("👥 Пригласить", payload={"command": "ref"}))
-    keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/sovietgirls_nft"))
+    keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/wall-225507433_2"))
     return keyboard
 
 async def get_upgrades_keyboard(user_id: int):
