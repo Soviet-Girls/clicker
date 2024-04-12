@@ -8,6 +8,10 @@ class CommandRule(ABCRule):
         self.commands = commands
 
     async def check(self, message: Message) -> bool:
+        if message.text is None:
+            return False
+        elif message.text == '':
+            return False
         return message.text.lower().split()[0] in self.commands
     
 
