@@ -163,7 +163,12 @@ async def mine_message(event: MessageEvent):
         raise e
     score = await data.get_score(user_id)
     _rm = refresh_message.get(user_id, 0)
-    await event.show_snackbar(f"🪙 {score} (+{cpc})")
+    try:
+        await event.show_snackbar(f"🪙 {score} (+{cpc})")
+    except Exception as e:
+        print(f"Error showing snackbar: {e}")
+        await asyncio.sleep(4)
+        await event.show_snackbar(f"🪙 {score} (+{cpc})")
     try:
         if _rm == 4:
             bot_message = await generate_play_message(event.object.peer_id)
