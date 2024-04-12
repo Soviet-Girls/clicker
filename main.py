@@ -181,7 +181,6 @@ async def mine_message(event: MessageEvent):
 
     except Exception as e:
         print(f"Error editing message: {e}")
-        await event.show_snackbar("🛑 Слишком быстро!")
 
 
 # Обработка команды "👥 Пригласить"
