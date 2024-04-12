@@ -327,15 +327,20 @@ async def vkpay_message(message: Message):
     _kb = keyboard.get_pay_keyboard()
     await message.answer("🎉 Поддержать проект можно на VK Pay", keyboard=_kb)
 
+old_payment_time = 0
 @bot.on.raw_event(GroupEventType.VKPAY_TRANSACTION)
 async def vkpay_transaction_handler(event):
+    global old_payment_time
+    if event['object']['date'] == old_payment_time:
+        return
+    old_payment_time = event['object']['date']
     user_id = event['object']['from_id']
     amount = event['object']['amount']
-    await data.change_score(user_id, amount*1000)
+    await data.change_score(user_id, amount)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message=f"🎉 Вы получили {amount*1000} SG₽!",
+            message=f"🎉 Вы получили {amount} SG₽!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
