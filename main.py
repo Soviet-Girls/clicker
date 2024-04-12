@@ -14,6 +14,12 @@ from bot import bot
 
 refresh_message = {}
 
+@bot.on.message(text="")
+async def blank_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await message.answer(str(message.json()))
+
 @bot.on.message(CommandRule(["начать", "start", "старт"]))
 async def start_message(message: Message):
     await message.answer(
