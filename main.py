@@ -7,6 +7,7 @@ from vkbottle.bot import Message, MessageEvent
 
 import data
 import keyboard
+import widget
 
 from rules import CommandRule, WalletRule
 from bot import bot
@@ -351,11 +352,19 @@ async def sleep_message(message: Message):
     data.set_sleep_time(sleep_time)
     await message.answer(f"💤 Установлено время сна {sleep_time} сек")
 
+@bot.on.message(CommandRule(["/widget"]))
+async def widget_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await widget.update()
+    await message.answer("🎨 Виджет обновлён!")
+
 
 @bot.loop_wrapper.interval(minutes=5)
 async def save_scores():
     await data.save_scores()
     await data.save_last_mines()
     await data.save_top()
+    await widget.update()
 
 bot.run_forever()
