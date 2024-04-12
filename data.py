@@ -93,25 +93,37 @@ def price_count(level: int) -> int:
     
 # refs
 
+refs = {}
+
 async def get_ref(user_id: int) -> int:
-    ref = await bot.api.storage.get("ref"+ver, user_id=user_id)
-    ref = ref[0].value
+    ref = refs.get(user_id, -1)
+    if ref == -1:
+        ref = await bot.api.storage.get("ref"+ver, user_id=user_id)
+        ref = ref[0].value
+        refs[user_id] = ref
     return 0 if ref == "" else int(ref)
 
 async def set_ref(user_id: int, ref: int) -> None:
     await bot.api.storage.set("ref"+ver, value=str(ref), user_id=user_id)
+    refs[user_id] = ref
 
 # ref count
 
+refs_count = {}
+
 async def get_ref_count(user_id: int) -> int:
-    ref_count = await bot.api.storage.get("ref_count"+ver, user_id=user_id)
-    ref_count = ref_count[0].value
+    ref_count = refs_count.get(user_id, -1)
+    if ref_count == -1:
+        ref_count = await bot.api.storage.get("ref_count"+ver, user_id=user_id)
+        ref_count = ref_count[0].value
+        refs_count[user_id] = ref_count
     return 0 if ref_count == "" else int(ref_count)
 
 async def change_ref_count(user_id: int, count: int) -> None:
     ref_count = await get_ref_count(user_id)
     ref_count += count
     await bot.api.storage.set("ref_count"+ver, value=str(ref_count), user_id=user_id)
+    refs_count[user_id] = ref_count
 
 # score
 
@@ -137,27 +149,41 @@ async def change_score(user_id: int, points: int) -> None:
 
 # coins per click
 
+levels = {}
+
 async def get_level(user_id: int) -> int:
-    level = await bot.api.storage.get("level"+ver, user_id=user_id)
-    level = level[0].value
+    level = levels.get(user_id, -1)
+    if level == -1:
+        level = await bot.api.storage.get("level"+ver, user_id=user_id)
+        level = level[0].value
+        levels[user_id] = level
     return 0 if level == "" else int(level)
 
 async def upgrade_level(user_id: int) -> None:
     level = await get_level(user_id)
     new_level = level + 1
     await bot.api.storage.set("level"+ver, value=str(new_level), user_id=user_id)
+    levels[user_id] = new_level
+
+
+cpcs = {}
 
 async def get_cpc(user_id: int) -> int:
-    cpc = await bot.api.storage.get("cpc"+ver, user_id=user_id)
-    cpc = cpc[0].value
+    cpc = cpcs.get(user_id, -1)
+    if cpc == -1:
+        cpc = await bot.api.storage.get("cpc"+ver, user_id=user_id)
+        cpc = cpc[0].value
+        cpcs[user_id] = cpc
     return 1 if cpc == "" else int(cpc)
 
 async def change_cpc(user_id: int, cpc: int) -> None:
     await bot.api.storage.set("cpc"+ver, value=str(cpc), user_id=user_id)
+    cpcs[user_id] = cpc
 
 async def upgrade_cpc(user_id: int) -> None:
     cpc = await get_cpc(user_id)
     await bot.api.storage.set("cpc"+ver, value=str(cpc*2), user_id=user_id)
+    cpcs[user_id] = cpc*2
 
 async def get_cpc_upgrade_price(user_id: int) -> int:
     cpc = await get_cpc(user_id)
@@ -166,13 +192,19 @@ async def get_cpc_upgrade_price(user_id: int) -> int:
 
 # automine status
 
+automines = {}
+
 async def get_automine_status(user_id: int) -> bool:
-    automine = await bot.api.storage.get("automine"+ver, user_id=user_id)
-    automine = automine[0].value
-    return False if automine == "" else bool(automine)
+    automine = automines.get(user_id, None)
+    if automine is None:
+        automine = await bot.api.storage.get("automine"+ver, user_id=user_id)
+        automine = False if automine[0].value == "" else bool(automine[0].value)
+        automines[user_id] = automine
+    return automine
 
 async def automine_on(user_id: int) -> None:
     await bot.api.storage.set("automine"+ver, value="True", user_id=user_id)
+    automines[user_id] = True
 
 async def get_last_mine(user_id: int) -> int:
     last_mine = last_mines.get(user_id, -1)
@@ -187,13 +219,19 @@ async def set_last_mine(user_id: int, time: int) -> None:
 
 # wallet
 
+wallets = {}
+
 async def get_wallet(user_id: int) -> str:
-    wallet = await bot.api.storage.get("wallet"+ver, user_id=user_id)
-    wallet = wallet[0].value
+    wallet = wallets.get(user_id, None)
+    if wallet is None:
+        wallet = await bot.api.storage.get("wallet"+ver, user_id=user_id)
+        wallet = wallet[0].value
+        wallets[user_id] = wallet
     return wallet
 
 async def set_wallet(user_id: int, wallet: str) -> None:
     await bot.api.storage.set("wallet"+ver, value=wallet, user_id=user_id)
+    wallets[user_id] = wallet
 
 
 # invite bonus

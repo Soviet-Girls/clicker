@@ -41,8 +41,9 @@ async def ref_admin_message(message: Message):
     ref_source = message.ref_source
     await message.answer(f"ref: {ref}, ref_source: {ref_source}")
     
-async def generate_play_message(user_id: int) -> str:
-    score = await data.get_score(user_id)
+async def generate_play_message(user_id: int, score: int = -1) -> str:
+    if score == -1:
+        score = await data.get_score(user_id)
     score = "{:,}".format(score).replace(",", " ")
     bot_message = f"💰 Твой счёт: {score} SG₽"
     sleep_time = data.get_sleep_time()
@@ -166,7 +167,9 @@ async def mine_message(event: MessageEvent):
     tm_last = await data.get_last_mine(user_id)
     tm = int(time.time())
     tm_diff = tm - tm_last
-    if tm_diff < 1:
+    sleep_time = data.get_sleep_time()
+    _st = 1 if sleep_time == 0 else sleep_time
+    if tm_diff < _st:
         await event.show_snackbar("🛑 Слишком быстро!")
         return
     cpc = await data.get_cpc(user_id)
@@ -180,7 +183,6 @@ async def mine_message(event: MessageEvent):
                 elif new_cpc < 1:
                     new_cpc = 1
                 cpc += new_cpc
-        sleep_time = data.get_sleep_time()
         if sleep_time > 0:
             await asyncio.sleep(sleep_time)
         await data.change_score(user_id, cpc)
@@ -198,7 +200,7 @@ async def mine_message(event: MessageEvent):
         await event.show_snackbar(f"🪙 {score} (+{cpc})")
     try:
         if _rm == 4:
-            bot_message = await generate_play_message(event.object.peer_id)
+            bot_message = await generate_play_message(event.object.peer_id, score)
             await bot.api.messages.edit(
                 peer_id=event.object.peer_id,
                 conversation_message_id=event.conversation_message_id,
