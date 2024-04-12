@@ -292,7 +292,7 @@ async def like_add_handler(event):
 # Обработка снятия лайка
 @bot.on.raw_event(GroupEventType.LIKE_REMOVE)
 async def like_remove_handler(event):
-    user_id = event['object']['unliker_id']
+    user_id = event['object']['liker_id']
     await data.change_score(user_id, -500)
     try:
         await bot.api.messages.send(
