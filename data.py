@@ -161,3 +161,14 @@ async def get_wallet(user_id: int) -> str:
 
 async def set_wallet(user_id: int, wallet: str) -> None:
     await bot.api.storage.set("wallet"+ver, value=wallet, user_id=user_id)
+
+
+# invite bonus
+
+async def get_invite_bonus(user_id: int) -> int:
+    invite_bonus = await bot.api.storage.get("invite_bonus"+ver, user_id=user_id)
+    invite_bonus = invite_bonus[0].value
+    return invite_bonus == "True"
+
+async def set_invite_bonus(user_id: int, invite_bonus: bool) -> None:
+    await bot.api.storage.set("invite_bonus"+ver, value=str(invite_bonus), user_id=user_id)

@@ -220,6 +220,41 @@ async def callback_handler(event: MessageEvent):
     elif event.object.payload.get("command") == "ref":
         await ref_message(event)
 
+# Обработка вступления в группу
+@bot.on.raw_event(GroupEventType.GROUP_JOIN)
+async def group_join_handler(event: MessageEvent):
+    # Даём бонус за вступление в группу
+    user_id = event.object.user_id
+    bonus = await data.get_invite_bonus(user_id)
+    if bonus is False:
+        await data.change_score(user_id, 1000)
+        await data.set_invite_bonus(user_id, True)
+        try:
+            await bot.api.messages.send(
+                user_id=user_id,
+                message="🎉 Вы получили 1000 SG₽ за вступление в группу!",
+                random_id=random.randint(0, 2 ** 64)
+            )
+        except Exception as e:
+            pass
+
+# Обработка выхода из группы
+@bot.on.raw_event(GroupEventType.GROUP_LEAVE)
+async def group_leave_handler(event: MessageEvent):
+    user_id = event.object.user_id
+    bonus = await data.get_invite_bonus(user_id)
+    if bonus is True:
+        await data.set_invite_bonus(user_id, False)
+        await data.change_score(user_id, -1000)
+    try:
+        await bot.api.messages.send(
+            user_id=user_id,
+            message="😢 Вы потеряли бонусные 1000 SG₽ за выход из группы!",
+            random_id=random.randint(0, 2 ** 64)
+        )
+    except Exception as e:
+        pass
+
 
 @bot.on.message(WalletRule())
 async def wallet_message(message: Message):
