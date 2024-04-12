@@ -237,6 +237,8 @@ async def callback_handler(event: MessageEvent):
         await upgrade_automine_message(event)
     elif event.object.payload.get("command") == "ref":
         await ref_message(event)
+    elif event.object.payload.get("command") == "top":
+        await top_message(event)
 
 # Обработка вступления в группу
 @bot.on.raw_event(GroupEventType.GROUP_JOIN)
