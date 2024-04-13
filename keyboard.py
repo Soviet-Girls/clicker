@@ -47,6 +47,8 @@ async def get_upgrades_keyboard(user_id: int):
     if automine_status is False:
         keyboard.row()
         keyboard.add(Callback("🤖 Автодобыча, 5000 SG₽", payload={"command": "upgrade_automine"}))
+    keyboard.row()
+    keyboard.add(Callback("🎰 Мне повезет, 1000 SG₽", payload={"command": "casino"}))
     return keyboard
 
 def get_pay_keyboard():
