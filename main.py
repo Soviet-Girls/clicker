@@ -255,7 +255,7 @@ async def rocket_message(event: MessageEvent):
         bot_message, kb = await generate_play_message(user_id)
         await bot.api.messages.edit(
             peer_id=user_id,
-            conversation_message_id=event['object']['conversation_message_id'],
+            conversation_message_id=event.conversation_message_id,
             message=bot_message,
             keyboard=kb,
             random_id=random.randint(0, 2 ** 64)
