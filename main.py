@@ -72,7 +72,7 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
         rocket_secret_codes[user_id] = random.randint(1000, 9999)
     else:
         rocket_secret_codes[user_id] = 0
-    kb = keyboard.get_play_keyboard(rocket)
+    kb = keyboard.get_play_keyboard(rocket, rocket_secret_codes[user_id])
     return bot_message, kb
     
 # Обработка команды "🎮 Играть"
