@@ -458,7 +458,7 @@ async def save_scores():
         await data.save_last_mines()
         await data.save_top()
         await widget.update()
-        await bot.api.groups.enable_online()
+        await bot.api.groups.enable_online(group_id=225507433)
     except Exception as e:
         print(f"Error saving scores: {e}")
         await bot.api.messages.send(
