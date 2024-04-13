@@ -47,6 +47,8 @@ async def ref_admin_message(message: Message):
     ref = message.ref
     ref_source = message.ref_source
     await message.answer(f"ref: {ref}, ref_source: {ref_source}")
+
+rocket_secret_codes = {}
     
 async def generate_play_message(user_id: int, score: int = -1) -> str:
     if score == -1:
@@ -66,6 +68,10 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
         bot_message += f"\n\n📦 Ваш кошелек: {wallet}.\n После закрытия игры SG₽ будут отправлены на этот адрес."
 
     rocket = random.randint(0, 20) == 0
+    if rocket:
+        rocket_secret_codes[user_id] = random.randint(1000, 9999)
+    else:
+        rocket_secret_codes[user_id] = 0
     kb = keyboard.get_play_keyboard(rocket)
     return bot_message, kb
     
@@ -246,6 +252,12 @@ async def ref_message(event: MessageEvent):
 # Обработка команды "🚀 БОНУС!"
 async def rocket_message(event: MessageEvent):
     user_id = event.object.peer_id
+    secret_code = rocket_secret_codes.get(user_id, 0)
+    if secret_code == 0:
+        return
+    if event.object.payload.get("command") != f"rocket-{secret_code}":
+        await event.show_snackbar("🤡 Хорошая попытка")
+        return
     score = await data.get_score(user_id)
     cpc = await data.get_cpc(user_id)
     bonus = cpc * 5
@@ -282,7 +294,7 @@ async def callback_handler(event: MessageEvent):
         await ref_message(event)
     elif event.object.payload.get("command") == "top":
         await top_message(event)
-    elif event.object.payload.get("command") == "rocket":
+    elif event.object.payload.get("command").startwith("rocket-"):
         await rocket_message(event)
 
 # Обработка вступления в группу

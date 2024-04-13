@@ -3,24 +3,24 @@ from vkbottle import Keyboard, OpenLink, Callback, VKPay
 
 import data
 
-def get_play_keyboard(rocket: bool = False):
+def get_play_keyboard(rocket: bool = False, secret_code: int = 0):
     keyboard = Keyboard(inline=True)
     if rocket:
         position = random.choice([0, 1, 2, 3])
         if position == 0:
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
             keyboard.row()
             keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
         elif position == 1:
             keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
         elif position == 2:
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
             keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
         elif position == 3:
             keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
             keyboard.row()
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
     else:
         keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
     return keyboard 

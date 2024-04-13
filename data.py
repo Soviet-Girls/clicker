@@ -1,4 +1,5 @@
 import asyncio
+import time
 from bot import bot
 
 ver = "0"
@@ -49,9 +50,12 @@ async def check_top() -> None:
         if _top != "":
             top = eval(_top[0].value)
 
+last_check_top = 0
 async def get_top() -> list:
-    if len(top) < 5:
+    global last_check_top
+    if time.time() - last_check_top > 60:
         await check_top()
+        last_check_top = time.time()
     return top
 
 async def save_top() -> None:
