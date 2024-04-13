@@ -252,6 +252,14 @@ async def rocket_message(event: MessageEvent):
     try:
         await data.change_score(user_id, bonus)
         await event.show_snackbar(f"🚀 {score} (+{bonus})")
+        bot_message, kb = await generate_play_message(user_id)
+        await bot.api.messages.edit(
+            peer_id=user_id,
+            conversation_message_id=event['object']['conversation_message_id'],
+            message=bot_message,
+            keyboard=kb,
+            random_id=random.randint(0, 2 ** 64)
+        )
     except Exception as e:
         await event.show_snackbar("🛑 Слишком быстро!")
         raise e
@@ -367,14 +375,6 @@ async def vkpay_transaction_handler(event):
         await bot.api.messages.send(
             user_id=user_id,
             message=f"🎉 Вы получили {amount} SG₽!",
-            random_id=random.randint(0, 2 ** 64)
-        )
-        bot_message, kb = await generate_play_message(user_id)
-        await bot.api.messages.edit(
-            peer_id=user_id,
-            conversation_message_id=event['object']['conversation_message_id'],
-            message=bot_message,
-            keyboard=kb,
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
