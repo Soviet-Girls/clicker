@@ -64,15 +64,18 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
     else:
         wallet = wallet[:5] + "..." + wallet[-5:]
         bot_message += f"\n\n📦 Ваш кошелек: {wallet}.\n После закрытия игры SG₽ будут отправлены на этот адрес."
-    return bot_message
+
+    rocket = random.randint(0, 99) == 0
+    kb = keyboard.get_play_keyboard(rocket)
+    return bot_message, kb
     
 # Обработка команды "🎮 Играть"
 async def play_message(event: MessageEvent):
-    bot_message = await generate_play_message(event.object.peer_id)
+    bot_message, kb = await generate_play_message(event.object.peer_id)
     await bot.api.messages.send(
         user_id=event.object.peer_id,
         message=bot_message,
-        keyboard=keyboard.get_play_keyboard(),
+        keyboard=kb,
         random_id=random.randint(0, 2 ** 64)
     )
     await event.show_snackbar("🎮 Игра началась!")
@@ -200,19 +203,19 @@ async def mine_message(event: MessageEvent):
     score = await data.get_score(user_id)
     _rm = refresh_message.get(user_id, 0)
     try:
-        await event.show_snackbar(f"🪙 {score} (+{cpc})")
+        await event.show_snackbar(f"💸 {score} (+{cpc}) SG₽")
     except Exception as e:
         print(f"Error showing snackbar: {e}")
         await asyncio.sleep(4)
-        await event.show_snackbar(f"🪙 {score} (+{cpc})")
+        await event.show_snackbar(f"💸 {score} (+{cpc}) SG₽")
     try:
         if _rm == 4:
-            bot_message = await generate_play_message(event.object.peer_id, score)
+            bot_message, kb = await generate_play_message(event.object.peer_id, score)
             await bot.api.messages.edit(
                 peer_id=event.object.peer_id,
                 conversation_message_id=event.conversation_message_id,
                 message=bot_message,
-                keyboard=keyboard.get_play_keyboard(),
+                keyboard=kb,
                 random_id=random.randint(0, 2 ** 64)
             )
             _rm = 0
@@ -238,6 +241,20 @@ async def ref_message(event: MessageEvent):
         message=bot_message,
         random_id=random.randint(0, 2 ** 64)
     )
+
+
+# Обработка команды "🚀 БОНУС!"
+async def rocket_message(event: MessageEvent):
+    user_id = event.object.peer_id
+    score = await data.get_score(user_id)
+    cpc = await data.get_cpc(user_id)
+    bonus = cpc * 5
+    try:
+        await data.change_score(user_id, bonus)
+        await event.show_snackbar(f"🚀 {score} (+{bonus}) SG₽")
+    except Exception as e:
+        await event.show_snackbar("🛑 Слишком быстро!")
+        raise e
     
     
 # Обработка callback

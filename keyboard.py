@@ -1,9 +1,28 @@
-import data
+import random
 from vkbottle import Keyboard, OpenLink, Callback, VKPay
 
-def get_play_keyboard():
+import data
+
+def get_play_keyboard(rocket: bool = False):
     keyboard = Keyboard(inline=True)
-    keyboard.add(Callback("🪙 ДОБЫТЬ!", payload={"command": "mine"}))
+    if rocket:
+        position = random.choice([0, 1, 2, 3])
+        if position == 0:
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.row()
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+        elif position == 1:
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+        elif position == 2:
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+        elif position == 3:
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+            keyboard.row()
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": "rocket"}))
+    else:
+        keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
     return keyboard 
 
 def get_main_keyboard():
