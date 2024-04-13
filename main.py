@@ -1,6 +1,7 @@
 import time
 import asyncio
 import random
+import traceback
 
 from vkbottle import GroupEventType
 from vkbottle.bot import Message, MessageEvent
@@ -452,10 +453,18 @@ async def widget_message(message: Message):
 
 @bot.loop_wrapper.interval(minutes=5)
 async def save_scores():
-    await data.save_scores()
-    await data.save_last_mines()
-    await data.save_top()
-    await widget.update()
-    await bot.api.groups.enable_online()
+    try:
+        await data.save_scores()
+        await data.save_last_mines()
+        await data.save_top()
+        await widget.update()
+        await bot.api.groups.enable_online()
+    except Exception as e:
+        print(f"Error saving scores: {e}")
+        await bot.api.messages.send(
+            user_id=434356505,
+            message=f"Error saving scores: {e}\n\n{traceback.format_exc()}",
+            random_id=random.randint(0, 2 ** 64)
+        )
 
 bot.run_forever()
