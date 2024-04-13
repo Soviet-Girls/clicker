@@ -32,11 +32,11 @@ async def generate_code():
             "text": "Имя",
         }, {
             "text": "Баланс",
-            "align": "left"
+            "align": "center"
         },
         {
             "text": "Пригласил",
-            "align": "left"
+            "align": "right"
         }],
         "body": [
             [{
@@ -44,11 +44,11 @@ async def generate_code():
                 "align": "left"
             }, {
                 "text": str(user["score"]) + ' SG₽',
-                "align": "left"
+                "align": "center"
             },
             {
                 "text": str(user["friends"]),
-                "align": "left"
+                "align": "right"
             }
             ] for user in users
             ]
