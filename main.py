@@ -294,7 +294,7 @@ async def callback_handler(event: MessageEvent):
         await ref_message(event)
     elif event.object.payload.get("command") == "top":
         await top_message(event)
-    elif event.object.payload.get("command").startwith("rocket-"):
+    elif event.object.payload.get("command").startswith("rocket-"):
         await rocket_message(event)
 
 # Обработка вступления в группу
