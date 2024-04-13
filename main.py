@@ -254,10 +254,13 @@ async def rocket_message(event: MessageEvent):
     user_id = event.object.peer_id
     secret_code = rocket_secret_codes.get(user_id, 0)
     if secret_code == 0:
+        await event.show_snackbar("🥲 Код бонуса просрочен")
         return
-    if event.object.payload.get("command") != f"rocket-{secret_code}":
+    elif event.object.payload.get("command") != f"rocket-{secret_code}":
         await event.show_snackbar("🤡 Хорошая попытка")
         return
+    else:
+        rocket_secret_codes[user_id] = 0
     score = await data.get_score(user_id)
     cpc = await data.get_cpc(user_id)
     bonus = cpc * 5
