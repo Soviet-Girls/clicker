@@ -186,7 +186,17 @@ async def mine_message(event: MessageEvent):
     sleep_time = data.get_sleep_time()
     _st = 1 if sleep_time == 0 else sleep_time
     if tm_diff < _st:
-        await event.show_snackbar("🛑 Слишком быстро!")
+        egg = random.randint(0, 15)
+        if egg == 0:
+            await event.show_snackbar("⚡ Вы постите слишком быстро!")
+        elif egg == 1:
+            await event.show_snackbar("🛑 Куда гонишь, брат?")
+        elif egg == 2:
+            await event.show_snackbar("🛑 Притормози, родной")
+        elif egg == 3:
+            await event.show_snackbar("🌿 Сходи потрогай траву")
+        else:
+            await event.show_snackbar("🛑 Слишком быстро!")
         return
     cpc = await data.get_cpc(user_id)
     try:
@@ -384,12 +394,12 @@ async def vkpay_transaction_handler(event):
         return
     old_payment_time[event['object']['from_id']] = event['object']['date']
     user_id = event['object']['from_id']
-    amount = event['object']['amount']
+    amount = event['object']['amount'] / 2
     await data.change_score(user_id, amount)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message=f"🎉 Вы получили {amount} SG₽!",
+            message=f"🎉 Вы получили {amount*2} SG₽!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
