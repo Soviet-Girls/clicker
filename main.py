@@ -65,7 +65,7 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
         wallet = wallet[:5] + "..." + wallet[-5:]
         bot_message += f"\n\n📦 Ваш кошелек: {wallet}.\n После закрытия игры SG₽ будут отправлены на этот адрес."
 
-    rocket = random.randint(0, 99) == 0
+    rocket = random.randint(0, 20) == 0
     kb = keyboard.get_play_keyboard(rocket)
     return bot_message, kb
     
