@@ -52,7 +52,7 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
     if score == -1:
         score = await data.get_score(user_id)
     score = "{:,}".format(score).replace(",", " ")
-    bot_message = f"💰 Твой счёт: {score} SG₽"
+    bot_message = f"💰 Твой счёт: {score}"
     sleep_time = data.get_sleep_time()
     if sleep_time == 0:
         bot_message += "\n\n⌛ Добыча доступна каждую секунду."
@@ -203,11 +203,11 @@ async def mine_message(event: MessageEvent):
     score = await data.get_score(user_id)
     _rm = refresh_message.get(user_id, 0)
     try:
-        await event.show_snackbar(f"💸 {score} (+{cpc}) SG₽")
+        await event.show_snackbar(f"💸 {score} (+{cpc})")
     except Exception as e:
         print(f"Error showing snackbar: {e}")
         await asyncio.sleep(4)
-        await event.show_snackbar(f"💸 {score} (+{cpc}) SG₽")
+        await event.show_snackbar(f"💸 {score} (+{cpc})")
     try:
         if _rm == 4:
             bot_message, kb = await generate_play_message(event.object.peer_id, score)
@@ -251,7 +251,7 @@ async def rocket_message(event: MessageEvent):
     bonus = cpc * 5
     try:
         await data.change_score(user_id, bonus)
-        await event.show_snackbar(f"🚀 {score} (+{bonus}) SG₽")
+        await event.show_snackbar(f"🚀 {score} (+{bonus})")
     except Exception as e:
         await event.show_snackbar("🛑 Слишком быстро!")
         raise e
