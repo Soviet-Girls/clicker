@@ -369,6 +369,14 @@ async def vkpay_transaction_handler(event):
             message=f"🎉 Вы получили {amount} SG₽!",
             random_id=random.randint(0, 2 ** 64)
         )
+        bot_message, kb = await generate_play_message(user_id)
+        await bot.api.messages.edit(
+            peer_id=user_id,
+            conversation_message_id=event['object']['conversation_message_id'],
+            message=bot_message,
+            keyboard=kb,
+            random_id=random.randint(0, 2 ** 64)
+        )
     except Exception as e:
         raise e
 
