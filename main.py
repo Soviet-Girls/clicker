@@ -52,7 +52,7 @@ async def generate_play_message(user_id: int, score: int = -1) -> str:
     if score == -1:
         score = await data.get_score(user_id)
     score = "{:,}".format(score).replace(",", " ")
-    bot_message = f"💰 Твой счёт: {score}"
+    bot_message = f"💰 Твой счёт: {score} SG₽"
     sleep_time = data.get_sleep_time()
     if sleep_time == 0:
         bot_message += "\n\n⌛ Добыча доступна каждую секунду."
