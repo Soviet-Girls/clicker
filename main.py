@@ -293,10 +293,14 @@ async def group_leave_handler(event):
     except Exception as e:
         pass
 
+old_like_time = {}
 # Обработка лайка
 @bot.on.raw_event(GroupEventType.LIKE_ADD)
 async def like_add_handler(event):
     user_id = event['object']['liker_id']
+    if old_like_time.get(user_id, 0) == event['object']['date']:
+        return
+    old_like_time[user_id] = event['object']['date']
     await data.change_score(user_id, 500)
     try:
         await bot.api.messages.send(
@@ -307,10 +311,14 @@ async def like_add_handler(event):
     except Exception as e:
         pass
 
+old_dislike_time = {}
 # Обработка снятия лайка
 @bot.on.raw_event(GroupEventType.LIKE_REMOVE)
 async def like_remove_handler(event):
     user_id = event['object']['liker_id']
+    if old_dislike_time.get(user_id, 0) == event['object']['date']:
+        return
+    old_dislike_time[user_id] = event['object']['date']
     await data.change_score(user_id, -500)
     try:
         await bot.api.messages.send(
@@ -325,15 +333,14 @@ async def like_remove_handler(event):
 @bot.on.message(CommandRule(["/vkpay"]))
 async def vkpay_message(message: Message):
     _kb = keyboard.get_pay_keyboard()
-    await message.answer("🎉 Поддержать проект можно на VK Pay", keyboard=_kb)
+    await message.answer("🎉 Поддержать проект можно через VK Pay", keyboard=_kb)
 
-old_payment_time = 0
+old_payment_time = {}
 @bot.on.raw_event(GroupEventType.VKPAY_TRANSACTION)
 async def vkpay_transaction_handler(event):
-    global old_payment_time
-    if event['object']['date'] == old_payment_time:
+    if event['object']['date'] == old_payment_time.get(event['object']['from_id'], 0):
         return
-    old_payment_time = event['object']['date']
+    old_payment_time[event['object']['from_id']] = event['object']['date']
     user_id = event['object']['from_id']
     amount = event['object']['amount']
     await data.change_score(user_id, amount)
@@ -397,5 +404,6 @@ async def save_scores():
     await data.save_last_mines()
     await data.save_top()
     await widget.update()
+    await bot.api.groups.enable_online()
 
 bot.run_forever()
