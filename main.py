@@ -178,11 +178,17 @@ async def upgrade_automine_message(event: MessageEvent):
     await event.show_snackbar("🤖 Автодобыча включена!")
     await upgrades_message(event)
 
+
+first_clicks = {}
 # Обработка команды "🪙 ДОБЫТЬ!"
 async def mine_message(event: MessageEvent):
     user_id = event.object.peer_id
     tm_last = await data.get_last_mine(user_id)
     tm = int(time.time())
+    first_click = first_clicks.get(user_id, -1)
+    if first_click == -1:
+        first_clicks[user_id] = tm
+        first_click = tm
     tm_diff = tm - tm_last
     sleep_time = data.get_sleep_time()
     _st = 1 if sleep_time == 0 else sleep_time
@@ -202,16 +208,21 @@ async def mine_message(event: MessageEvent):
     cpc = await data.get_cpc(user_id)
     try:
         automine_status = await data.get_automine_status(user_id)
-        if automine_status:
-            if tm_diff > 600:
+        if tm_diff > 600:
+            if automine_status:
                 new_cpc = int(tm_diff /2 * cpc / 100)
                 if new_cpc > 10000:
                     new_cpc = 10000
                 elif new_cpc < 1:
                     new_cpc = 1
                 cpc += new_cpc
+            first_clicks[user_id] = tm
+            first_click = tm
         if sleep_time > 0:
             await asyncio.sleep(sleep_time)
+        if tm - first_click > 1200:
+            await event.show_snackbar("⌛ Отвлекись на 10 минут")
+            return
         await data.change_score(user_id, cpc)
         await data.set_last_mine(user_id, tm)
     except Exception as e:
