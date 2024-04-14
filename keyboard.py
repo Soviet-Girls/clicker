@@ -42,12 +42,14 @@ async def get_upgrades_keyboard(user_id: int):
     level = await data.get_level(user_id)
     cpc_upgrade_price, _ = data.price_count(level)
     cpc_upgrade_price = "{:,}".format(cpc_upgrade_price).replace(",", " ")
-    keyboard.add(Callback(f"🔼 Улучшение клика за {cpc_upgrade_price} SG₽", payload={"command": "upgrade_cpc"}))
+    if level < 121:
+        keyboard.add(Callback(f"🔼 Улучшение клика за {cpc_upgrade_price} SG₽", payload={"command": "upgrade_cpc"}))
     automine_status = await data.get_automine_status(user_id)
     if automine_status is False:
         keyboard.row()
         keyboard.add(Callback("🤖 Автодобыча, 5000 SG₽", payload={"command": "upgrade_automine"}))
-    keyboard.row()
+    if level < 121:
+        keyboard.row()
     keyboard.add(Callback("🎰 Мне повезет, 1000 SG₽", payload={"command": "casino"}))
     return keyboard
 
