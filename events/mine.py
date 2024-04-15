@@ -5,11 +5,12 @@ import time
 from vkbottle.bot import MessageEvent
 
 import data
-from bot import bot
+from bot import bot, user_api
 from templates import play_message
 
 first_clicks = {}
 refresh_message = {}
+spam_count = {}
 # Обработка команды "🪙 ДОБЫТЬ!"
 async def message(event: MessageEvent):
     user_id = event.object.peer_id
@@ -52,6 +53,16 @@ async def message(event: MessageEvent):
             await asyncio.sleep(sleep_time)
         if tm - first_click > 1200:
             await event.show_snackbar("⌛ Отвлекись на 10 минут")
+            spam_count[user_id] = spam_count.get(user_id, 0) + 1
+            if spam_count[user_id] > 99:
+                await user_api.groups.ban(
+                    group_id=225507433,
+                    owner_id=user_id,
+                    reason=0,
+                    comment="Подозрительная активность. Обратитесь к администору.",
+                    comment_visible=True
+                )
+                return
             return
         await data.change_score(user_id, cpc)
         await data.set_last_mine(user_id, tm)
