@@ -8,7 +8,7 @@ from templates import play_message
 # Обработка команды "🚀 БОНУС!"
 async def message(event: MessageEvent):
     user_id = event.object.peer_id
-    secret_code = await data.get_secret_code(user_id)
+    secret_code = data.get_secret_code(user_id)
     if secret_code == 0:
         await event.show_snackbar("🥲 Код бонуса просрочен")
         return
@@ -16,7 +16,7 @@ async def message(event: MessageEvent):
         await event.show_snackbar("🤡 Хорошая попытка")
         return
     else:
-        await data.set_secret_code(user_id, 0)
+        data.set_secret_code(user_id, 0)
     score = await data.get_score(user_id)
     cpc = await data.get_cpc(user_id)
     bonus = cpc * 5
