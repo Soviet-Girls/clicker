@@ -8,8 +8,6 @@ bot = Bot(config.VK_WIDGET)
 
 async def generate_code():
     # виджет топ 5
-    users_count = await bot.api.messages.get_conversations(count=1)
-    users_count = users_count.count
     top = await data.get_top()
     users = await bot.api.users.get(user_ids=[user[0] for user in top])
     names = [f"{user.first_name} {user.last_name[0]}." for user in users]
@@ -28,7 +26,7 @@ async def generate_code():
         })
 
     widget = {
-        "title": f"🏆 Топ 5 игроков (из {users_count})",
+        "title": "🏆 Топ 5 игроков",
         "title_url": "https://vk.me/soviet_clicker",
         "more": "Играть",
         "more_url": "https://vk.me/soviet_clicker",
