@@ -6,17 +6,23 @@ from bot import bot
 
 def save_wallet(wallet, status):
     if status == 1:
-        with open("wallets_regular.txt", "r") as f:
-            wallets = f.read().split("\n")
-        if wallet in wallets:
-            return False
+        try:
+            with open("wallets_regular.txt", "r") as f:
+                wallets = f.read().split("\n")
+            if wallet in wallets:
+                return False
+        except FileNotFoundError:
+            pass
         with open("wallets_regular.txt", "a") as f:
             f.write(wallet + "\n")
     elif status == 0:
-        with open("wallets_top5.txt", "r") as f:
-            wallets = f.read().split("\n")
-        if wallet in wallets:
-            return False
+        try:
+            with open("wallets_top5.txt", "r") as f:
+                wallets = f.read().split("\n")
+            if wallet in wallets:
+                return False
+        except FileNotFoundError:
+            pass
         with open("wallets_top5.txt", "a") as f:
             f.write(wallet + "\n")
     return True
