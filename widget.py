@@ -8,7 +8,7 @@ bot = Bot(config.VK_WIDGET)
 
 async def generate_code():
     # виджет топ 5
-    users_count = await bot.api.messages.get_conversations(count=0)
+    users_count = await bot.api.messages.get_conversations(count=1)
     users_count = users_count.count
     top = await data.get_top()
     users = await bot.api.users.get(user_ids=[user[0] for user in top])
