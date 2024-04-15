@@ -18,3 +18,4 @@ async def message(event: MessageEvent):
         message=bot_message,
         random_id=random.randint(0, 2 ** 64)
     )
+    await event.show_snackbar("👥 Реферальная ссылка готова")
