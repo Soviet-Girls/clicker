@@ -5,3 +5,4 @@ load_dotenv()
 
 VK_TOKEN = os.getenv('VK_TOKEN')
 VK_WIDGET = os.getenv('VK_WIDGET')
+VK_ADMIN = os.getenv('VK_ADMIN')
