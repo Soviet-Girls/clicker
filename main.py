@@ -32,8 +32,8 @@ async def start_message(message: Message):
                 return
             await data.set_ref(message.from_id, ref)
             await data.change_ref_count(ref, 1)
-            await data.change_score(ref, 1000)
-            bot_message = "🎉 Вы получили 1000 SG₽ за приглашение друга!"
+            await data.change_score(ref, 10000)
+            bot_message = "🎉 Вы получили 10 000 SG₽ за приглашение друга!"
             await bot.api.messages.send(
                 user_id=ref,
                 message=bot_message,
