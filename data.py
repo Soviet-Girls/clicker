@@ -275,7 +275,7 @@ def set_secret_code(user_id: int, secret_code: int) -> None:
 
 # keyboard update
 
-actual = 2
+actual = 3
 async def get_keyboard_version(user_id: int) -> str:
     keyboard = await bot.api.storage.get("keyboard"+ver, user_id=user_id)
     keyboard = keyboard[0].value
