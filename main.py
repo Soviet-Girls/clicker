@@ -74,11 +74,11 @@ async def callback_handler(event: MessageEvent):
 
     keyboard_version_status = await data.check_keyboard_version(event.object.peer_id)
     if keyboard_version_status is False:
-        await bot.api.messages.edit(
-            peer_id=event.object.peer_id,
-            conversation_message_id=event.conversation_message_id,
+        await bot.api.messages.send(
             message="Клавиатура обновлена!",
-            keyboard=keyboard.get_main_keyboard()
+            keyboard=keyboard.get_main_keyboard(),
+            user_id=event.object.peer_id,
+            random_id=random.randint(0, 2 ** 64)
         )
         await data.update_keyboard_version(event.object.peer_id)
     
