@@ -1,6 +1,8 @@
 import random
 from vkbottle.bot import MessageEvent
 
+import logging
+
 import data
 from bot import bot
 from templates import play_message
@@ -11,9 +13,11 @@ async def message(event: MessageEvent):
     secret_code = data.get_secret_code(user_id)
     if secret_code == 0:
         await event.show_snackbar("🥲 Код бонуса просрочен")
+        logging.info(f"[BONUS] Expired bonus code! https://vk.com/gim225507433?sel={user_id}")
         return
     elif event.object.payload.get("command") != f"rocket-{secret_code}":
         await event.show_snackbar("🤡 Хорошая попытка")
+        logging.info(f"[BONUS] Hack! https://vk.com/gim225507433?sel={user_id}")
         return
     else:
         data.set_secret_code(user_id, 0)
@@ -31,6 +35,7 @@ async def message(event: MessageEvent):
             keyboard=kb,
             random_id=random.randint(0, 2 ** 64)
         )
+        logging.info(f"[BONUS] {bonus} SG₽ https://vk.com/gim225507433?sel={user_id}")
     except Exception as e:
         await event.show_snackbar("🛑 Слишком быстро!")
         raise e

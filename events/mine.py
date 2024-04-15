@@ -8,6 +8,8 @@ import data
 from bot import bot, user_api
 from templates import play_message
 
+import logging
+
 first_clicks = {}
 refresh_message = {}
 spam_count = {}
@@ -62,7 +64,9 @@ async def message(event: MessageEvent):
                     comment="Подозрительная активность. Обратитесь к администору.",
                     comment_visible=True
                 )
+                logging.info(f"[BAN] https://vk.com/gim225507433?sel={user_id}")
                 return
+            logging.info(f"[SPAM {spam_count[user_id]}/100] https://vk.com/gim225507433?sel={user_id}")
             return
         await data.change_score(user_id, cpc)
         await data.set_last_mine(user_id, tm)
@@ -91,6 +95,7 @@ async def message(event: MessageEvent):
         else:
             _rm += 1
         refresh_message[user_id] = _rm
-
     except Exception as e:
         print(f"Error editing message: {e}")
+
+    logging.info(f"[CLICK] https://vk.com/gim225507433?sel={user_id}")

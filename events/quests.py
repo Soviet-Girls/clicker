@@ -1,6 +1,8 @@
 import random
 from vkbottle.bot import MessageEvent
 
+import logging
+
 import keyboard
 import data
 from bot import bot
@@ -75,12 +77,14 @@ async def check(event: MessageEvent):
             await data.change_score(user_id, quest["reward"])
             count += 1
             reward_sum += quest["reward"]
+            logging.info(f"[QUESTS] Cmpleted quest {quest_id}! https://vk.com/gim225507433?sel={user_id}")
 
     if count == 0:
         bot_message = "🤯 Вы не выполнили ни одного задания."
     else:
         reward_sum = "{:,}".format(reward_sum).replace(",", " ")
         bot_message = f"🎉 Заданий выполнено: {count}! Получено {reward_sum} SG₽."
+
 
     await bot.api.messages.send(
         user_id=user_id,

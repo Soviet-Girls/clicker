@@ -1,6 +1,8 @@
 import random
 from vkbottle.bot import MessageEvent
 
+import logging
+
 from templates import play_message
 from bot import bot
 
@@ -15,3 +17,4 @@ async def message(event: MessageEvent):
         random_id=random.randint(0, 2 ** 64)
     )
     await event.show_snackbar("🎮 Игра началась!")
+    logging.info(f"[PLAY] Game started! https://vk.com/gim225507433?sel={event.object.peer_id}")

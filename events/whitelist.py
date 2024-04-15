@@ -1,6 +1,8 @@
 import random
 from vkbottle.bot import MessageEvent
 
+import logging
+
 import data
 from bot import bot
 
@@ -50,6 +52,7 @@ async def message(event: MessageEvent):
             message=bot_message,
             random_id=random.randint(0, 2 ** 64)
         )
+        logging.info(f"[NFT] Not enough score! https://vk.com/gim225507433?sel={user_id}")
         return
     in_top = False
     for i, user in enumerate(top):
@@ -57,10 +60,12 @@ async def message(event: MessageEvent):
             check = save_wallet(wallet, 0)
             bot_message = "🎉 Поздравляем! Вы получите NFT со статусом <<Топовый игрок>>! Токен будет отправлен на ваш кошелек в течение недели."
             in_top = True
+            logging.info(f"[NFT] Top player! https://vk.com/gim225507433?sel={user_id}")
             break
     if not in_top:
         check = save_wallet(wallet, 1)
         bot_message = "🎉 Вы добавлены в вайтлист! Токен будет отправлен на ваш кошелек в течение недели."
+        logging.info(f"[NFT] Regular player! https://vk.com/gim225507433?sel={user_id}")
     if check is False:
         bot_message = "⚠️ Вы уже в вайтлисте!"
     else:

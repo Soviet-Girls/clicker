@@ -1,6 +1,8 @@
 import asyncio
 from vkbottle.bot import MessageEvent
 
+import logging
+
 import data
 from  events.upgrades import message as upgrades_message
 
@@ -10,6 +12,7 @@ async def message(event: MessageEvent):
     score = await data.get_score(user_id)
     if score < 5000:
         await event.show_snackbar("🛑 Недостаточно средств!")
+        logging.info(f"[AUTOMINE] Not enough money! https://vk.com/gim225507433?sel={user_id}")
         return
     try:
         await data.change_score(user_id, -5000)
@@ -28,3 +31,4 @@ async def message(event: MessageEvent):
             await asyncio.sleep(1)
     await event.show_snackbar("🤖 Автодобыча включена!")
     await upgrades_message(event)
+    logging.info(f"[AUTOMINE] Automine enabled! https://vk.com/gim225507433?sel={user_id}")

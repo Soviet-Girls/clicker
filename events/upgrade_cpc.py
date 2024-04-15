@@ -1,6 +1,8 @@
 import asyncio
 from vkbottle.bot import MessageEvent
 
+import logging
+
 import data
 from  events.upgrades import message as upgrades_message
 
@@ -12,6 +14,7 @@ async def message(event: MessageEvent):
     score = await data.get_score(user_id)
     if score < price:
         await event.show_snackbar("🛑 Недостаточно средств!")
+        logging.info(f"[UPGRADE_CPC] Not enough money! https://vk.com/gim225507433?sel={user_id}")
         return
     try:
         await data.change_score(user_id, -price)
@@ -40,3 +43,4 @@ async def message(event: MessageEvent):
             await asyncio.sleep(1)
     await event.show_snackbar("🔼 Улучшение произведено!")
     await upgrades_message(event)
+    logging.info(f"[UPGRADE_CPC] Upgraded to {level}! https://vk.com/gim225507433?sel={user_id}")

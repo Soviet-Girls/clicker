@@ -4,6 +4,8 @@ import traceback
 from vkbottle import GroupEventType
 from vkbottle.bot import Message, MessageEvent
 
+import logging
+
 import data
 import keyboard
 import widget
@@ -11,6 +13,8 @@ import events
 
 from rules import CommandRule, WalletRule
 from bot import bot
+
+logging.getLogger("vkbottle").setLevel(logging.INFO)
 
 @bot.on.message(text="")
 async def blank_message(message: Message):
@@ -34,6 +38,7 @@ async def start_message(message: Message):
             await data.change_ref_count(ref, 1)
             await data.change_score(ref, 10000)
             bot_message = "🎉 Вы получили 10 000 SG₽ за приглашение друга!"
+            logging.info(f"[REF] {ref} invited {message.from_id}")
             await bot.api.messages.send(
                 user_id=ref,
                 message=bot_message,
@@ -104,6 +109,7 @@ async def group_join_handler(event):
             )
         except Exception as e:
             pass
+        logging.info(f"[JOIN] https://vk.com/gim225507433?sel={user_id}")
 
 # Обработка выхода из группы
 @bot.on.raw_event(GroupEventType.GROUP_LEAVE)
@@ -121,6 +127,7 @@ async def group_leave_handler(event):
         )
     except Exception as e:
         pass
+    logging.info(f"[LEAVE] https://vk.com/gim225507433?sel={user_id}")
 
 old_like_time = {}
 # Обработка лайка
@@ -186,6 +193,7 @@ async def vkpay_transaction_handler(event):
 async def wallet_message(message: Message):
     await data.set_wallet(message.from_id, message.text)
     await message.answer("📦 Кошелек успешно установлен!")
+    logging.info(f"[WALLET] {message.from_id} set wallet {message.text}")
 
 
 @bot.on.message(text='/save')
