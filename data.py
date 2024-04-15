@@ -43,7 +43,7 @@ top = []
 
 async def check_top() -> None:
     global top
-    scores_data = {k: int(v) for k, v in scores.items() if v.isdigit()}
+    scores_data = {k: int(v) for k, v in scores.items() if not isinstance(v, str)}
     top = sorted(scores_data.items(), key=lambda x: x[1], reverse=True)[:5]
     if len(top) < 5:
         _top = await bot.api.storage.get("top"+ver, user_id=1)
