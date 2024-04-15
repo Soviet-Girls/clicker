@@ -20,6 +20,7 @@ quests = {
 
 # Обработка команды "💛 Задания""
 async def message(event: MessageEvent):
+    await event.show_snackbar("💛 Задания")
     user_id = event.object.peer_id
     bot_message = "💛 Доступные задания:"
 
@@ -36,6 +37,13 @@ async def message(event: MessageEvent):
 
     if awavailable_quests == 0:
         bot_message = "🤯 Все задания выполнены! Скоро появятся новые."
+        await bot.api.messages.send(
+            user_id=user_id,
+            message=bot_message,
+            random_id=random.randint(0, 2 ** 64),
+            dont_parse_links=True
+        )
+        return
 
 
     await bot.api.messages.send(
@@ -45,7 +53,6 @@ async def message(event: MessageEvent):
         random_id=random.randint(0, 2 ** 64),
         dont_parse_links=True
     )
-    await event.show_snackbar("💛 Задания")
 
 
 # Обработка команды "🔹 Проверить выполнение"
@@ -74,3 +81,4 @@ async def check(event: MessageEvent):
         message=bot_message,
         random_id=random.randint(0, 2 ** 64)
     )
+    await event.answer("🔹 Выполнение проверено")
