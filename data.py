@@ -146,6 +146,8 @@ async def change_score(user_id: int, points: int) -> None:
         if points > 99:
             ref_score = await get_score(ref)
             ref_score += points // 100
+        elif points < 0:
+            ref_score = 0
         else:
             ref_score = await get_score(ref)
             ref_score += 1
