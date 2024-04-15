@@ -42,7 +42,8 @@ async def message(event: MessageEvent):
         user_id=user_id,
         message=bot_message,
         keyboard=keyboard.get_quest_keyboard(),
-        random_id=random.randint(0, 2 ** 64)
+        random_id=random.randint(0, 2 ** 64),
+        dont_parse_links=True
     )
     await event.show_snackbar("💛 Задания")
 
