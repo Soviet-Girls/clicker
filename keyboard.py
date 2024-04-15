@@ -1,5 +1,5 @@
 import random
-from vkbottle import Keyboard, OpenLink, Callback, VKPay
+from vkbottle import Keyboard, OpenLink, Callback, VKPay, KeyboardButtonColor
 
 import data
 
@@ -8,21 +8,21 @@ def get_play_keyboard(rocket: bool = False, secret_code: int = 0):
     if rocket:
         position = random.choice([0, 1, 2, 3])
         if position == 0:
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}), color=KeyboardButtonColor.NEGATIVE)
             keyboard.row()
-            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}), color=KeyboardButtonColor.POSITIVE)
         elif position == 1:
-            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}), color=KeyboardButtonColor.POSITIVE)
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}), color=KeyboardButtonColor.NEGATIVE)
         elif position == 2:
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
-            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}), color=KeyboardButtonColor.NEGATIVE)
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}), color=KeyboardButtonColor.POSITIVE)
         elif position == 3:
-            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+            keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}), color=KeyboardButtonColor.POSITIVE)
             keyboard.row()
-            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}))
+            keyboard.add(Callback("🚀 БОНУС!", payload={"command": f"rocket-{secret_code}"}), color=KeyboardButtonColor.NEGATIVE)
     else:
-        keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}))
+        keyboard.add(Callback("💰 ДОБЫТЬ!", payload={"command": "mine"}), color=KeyboardButtonColor.POSITIVE)
     return keyboard 
 
 def get_main_keyboard():
