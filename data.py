@@ -142,9 +142,13 @@ async def get_score(user_id: int) -> int:
 
 async def change_score(user_id: int, points: int) -> None:
     ref = await get_ref(user_id)
-    if ref != 0 and points > 99:
-        ref_score = await get_score(ref)
-        ref_score += points // 100
+    if ref != 0:
+        if points > 99:
+            ref_score = await get_score(ref)
+            ref_score += points // 100
+        else:
+            ref_score = await get_score(ref)
+            ref_score += 1
         scores[ref] = ref_score
     score = await get_score(user_id)
     score += points
