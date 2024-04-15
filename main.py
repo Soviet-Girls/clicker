@@ -179,6 +179,13 @@ async def save_message(message: Message):
     await data.save_top()
     await message.answer("📦 Данные сохранены!")
 
+@bot.on.message(text='/top')
+async def top_refresh_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await data.check_top()
+    await message.answer("🎉 Топ обновлён!")
+
 @bot.on.message(CommandRule(["/bonus"]))
 async def bonus_message(message: Message):
     if message.from_id != 434356505:
