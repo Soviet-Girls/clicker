@@ -36,7 +36,7 @@ def get_main_keyboard():
     keyboard.add(Callback("🔝 Топ игроков", payload={"command": "top"}))
     keyboard.row()
     keyboard.add(Callback("🖼️ Получить NFT", payload={"command": "whitelist"}))
-    keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/wall-225507433_2"))
+    keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/@soviet_clicker-help"))
     return keyboard
 
 async def get_upgrades_keyboard(user_id: int):
