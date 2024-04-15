@@ -71,6 +71,10 @@ async def callback_handler(event: MessageEvent):
         await events.bonus.message(event)
     elif event.object.payload.get("command") == "whitelist":
         await events.whitelist.message(event)
+    elif event.object.payload.get("command") == "quests":
+        await events.quests.message(event)
+    elif event.object.payload.get("command") == "check_quest":
+        await events.quests.check(event)
 
     keyboard_version_status = await data.check_keyboard_version(event.object.peer_id)
     if keyboard_version_status is False:

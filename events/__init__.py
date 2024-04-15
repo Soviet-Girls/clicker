@@ -8,5 +8,6 @@ from events import (
     top,
     upgrade_cpc,
     upgrades,
-    whitelist
+    whitelist,
+    quests,
 )

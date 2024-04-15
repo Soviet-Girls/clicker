@@ -30,6 +30,7 @@ def get_main_keyboard():
     keyboard.add(Callback("🎮 Играть", payload={"command": "play"}))
     keyboard.row()
     keyboard.add(Callback("🛍️ Улучшения", payload={"command": "upgrades"}))
+    keyboard.add(Callback("💛 Задания", payload={"command": "quests"}))
     keyboard.row()
     keyboard.add(Callback("👥 Пригласить", payload={"command": "ref"}))
     keyboard.add(Callback("🔝 Топ игроков", payload={"command": "top"}))
@@ -57,4 +58,9 @@ async def get_upgrades_keyboard(user_id: int):
 def get_pay_keyboard():
     keyboard = Keyboard(inline=True)
     keyboard.add(VKPay(payload={'pays': 0}, hash="action=transfer-to-group&group_id=225507433&aid=1"))
+    return keyboard
+
+def get_quest_keyboard():
+    keyboard = Keyboard(inline=True)
+    keyboard.add(Callback("🔹 Проверить выполнение", payload={"command": "check_quest"}))
     return keyboard

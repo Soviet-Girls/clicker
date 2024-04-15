@@ -271,7 +271,7 @@ def set_secret_code(user_id: int, secret_code: int) -> None:
 
 # keyboard update
 
-actual = 1
+actual = 2
 async def get_keyboard_version(user_id: int) -> str:
     keyboard = await bot.api.storage.get("keyboard"+ver, user_id=user_id)
     keyboard = keyboard[0].value
@@ -283,3 +283,19 @@ async def update_keyboard_version(user_id: int) -> None:
 async def check_keyboard_version(user_id: int) -> bool:
     current = await get_keyboard_version(user_id)
     return current == actual
+
+
+# quests
+
+async def get_quests(user_id: int) -> list:
+    quests = await bot.api.storage.get("quests"+ver, user_id=user_id)
+    quests = quests[0].value
+    return [] if quests == "" else eval(quests)
+
+async def set_quests(user_id: int, quests: list) -> None:
+    await bot.api.storage.set("quests"+ver, value=str(quests), user_id=user_id)
+
+async def add_quest(user_id: int, quest: int) -> None:
+    quests = await get_quests(user_id)
+    quests.append(quest)
+    await bot.api.storage.set("quests"+ver, value=str(quests), user_id=user_id)
