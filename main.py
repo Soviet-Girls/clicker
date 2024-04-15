@@ -99,7 +99,7 @@ async def group_join_handler(event):
         try:
             await bot.api.messages.send(
                 user_id=user_id,
-                message="🎉 Вы получили 1000 SG₽ за вступление в группу!",
+                message="🎉 Вы получили 10 000 SG₽ за вступление в группу!",
                 random_id=random.randint(0, 2 ** 64)
             )
         except Exception as e:
@@ -116,7 +116,7 @@ async def group_leave_handler(event):
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="😢 Вы потеряли бонусные 1000 SG₽ за выход из группы!",
+            message="😢 Вы потеряли бонусные 10 000 SG₽ за выход из группы!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
