@@ -15,6 +15,7 @@ from rules import CommandRule, WalletRule
 from bot import bot
 
 logging.getLogger("vkbottle").setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 
 @bot.on.message(text="")
 async def blank_message(message: Message):

@@ -78,7 +78,7 @@ async def message(event: MessageEvent):
     try:
         await event.show_snackbar(f"💸 {score} (+{cpc})")
     except Exception as e:
-        print(f"Error showing snackbar: {e}")
+        logging.error(f"[MINE] https://vk.com/gim225507433?sel={user_id} Error showing snackbar: {e}")
         await asyncio.sleep(4)
         await event.show_snackbar(f"💸 {score} (+{cpc})")
     try:
@@ -96,6 +96,6 @@ async def message(event: MessageEvent):
             _rm += 1
         refresh_message[user_id] = _rm
     except Exception as e:
-        print(f"Error editing message: {e}")
+        logging.error(f"[MINE] https://vk.com/gim225507433?sel={user_id} Error editing message: {e}")
 
     logging.info(f"[CLICK] https://vk.com/gim225507433?sel={user_id}")
