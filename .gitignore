@@ -1,3 +1,6 @@
 /venv
 .env
 __pycache__
+
+wallets_regular.txt
+wallets_top5.txt

@@ -268,3 +268,18 @@ def get_secret_code(user_id: int) -> int:
 
 def set_secret_code(user_id: int, secret_code: int) -> None:
     secret_codes[user_id] = secret_code
+
+# keyboard update
+
+actual = 1
+async def get_keyboard_version(user_id: int) -> str:
+    keyboard = await bot.api.storage.get("keyboard"+ver, user_id=user_id)
+    keyboard = keyboard[0].value
+    return 0 if keyboard == "" else int(keyboard)
+
+async def update_keyboard_version(user_id: int) -> None:
+    await bot.api.storage.set("keyboard"+ver, value=str(actual), user_id=user_id)
+
+async def check_keyboard_version(user_id: int) -> bool:
+    current = await get_keyboard_version(user_id)
+    return current == actual

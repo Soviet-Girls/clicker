@@ -46,7 +46,8 @@ async def ref_admin_message(message: Message):
     ref_source = message.ref_source
     await message.answer(f"ref: {ref}, ref_source: {ref_source}")
 
-    
+
+
 # Обработка callback
 @bot.on.raw_event(GroupEventType.MESSAGE_EVENT, dataclass=MessageEvent)
 async def callback_handler(event: MessageEvent):
@@ -68,6 +69,19 @@ async def callback_handler(event: MessageEvent):
         await events.casino.message(event)
     elif event.object.payload.get("command").startswith("rocket-"):
         await events.bonus.message(event)
+    elif event.object.payload.get("command") == "whitelist":
+        await events.whitelist.message(event)
+
+    keyboard_version_status = await data.check_keyboard_version(event.object.peer_id)
+    if keyboard_version_status is False:
+        await bot.api.messages.edit(
+            peer_id=event.object.peer_id,
+            conversation_message_id=event.conversation_message_id,
+            message="Клавиатура обновлена!",
+            keyboard=keyboard.get_main_keyboard()
+        )
+        await data.update_keyboard_version(event.object.peer_id)
+    
 
 # Обработка вступления в группу
 @bot.on.raw_event(GroupEventType.GROUP_JOIN)

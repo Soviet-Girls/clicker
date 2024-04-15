@@ -7,5 +7,6 @@ from events import (
     ref,
     top,
     upgrade_cpc,
-    upgrades
+    upgrades,
+    whitelist
 )
