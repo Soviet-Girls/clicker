@@ -74,6 +74,7 @@ async def check(event: MessageEvent):
     if count == 0:
         bot_message = "🤯 Вы не выполнили ни одного задания."
     else:
+        reward_sum = "{:,}".format(reward_sum).replace(",", " ")
         bot_message = f"🎉 Заданий выполнено: {count}! Получено {reward_sum} SG₽."
 
     await bot.api.messages.send(
