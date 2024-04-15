@@ -257,3 +257,14 @@ def get_sleep_time() -> int:
 def set_sleep_time(new_sleep_time: int):
     global sleep_time
     sleep_time = new_sleep_time
+
+# secret codes
+
+secret_codes = {}
+
+def get_secret_code(user_id: int) -> int:
+    secret_code = secret_codes.get(user_id, 0)
+    return secret_code
+
+def set_secret_code(user_id: int, secret_code: int) -> None:
+    secret_codes[user_id] = secret_code
