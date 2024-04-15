@@ -15,11 +15,13 @@ async def generate_code():
     emojis = ["🥇", "🥈", "🥉"]
     for i, user in enumerate(top):
         refs = await data.get_ref_count(user[0])
+        level = await data.get_level(user[0])
         users.append({
             "top": emojis[i] if i < 3 else '🏅',
             "id": user[0],
             "score": "{:,}".format(user[1]).replace(",", " "),
             "name": names[i],
+            "level": level,
             "friends": refs
         })
 
@@ -34,6 +36,9 @@ async def generate_code():
             "text": "Баланс",
             "align": "center"
         },
+        {   "text": "Уровень",
+            "align": "center"
+        },
         {
             "text": "Пригласил",
             "align": "right"
@@ -44,6 +49,10 @@ async def generate_code():
                 "align": "left"
             }, {
                 "text": str(user["score"]) + ' SG₽',
+                "align": "center"
+            },
+            {
+                "text": str(user["level"]),
                 "align": "center"
             },
             {
