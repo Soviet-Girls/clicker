@@ -54,8 +54,11 @@ async def message(event: MessageEvent):
         if sleep_time > 0:
             await asyncio.sleep(sleep_time)
         if tm - first_click > 1200:
-            await event.show_snackbar("⌛ Отвлекись на 10 минут")
             spam_count[user_id] = spam_count.get(user_id, 0) + 1
+            if spam_count[user_id] > 50:
+                await event.show_snackbar(f"⛔ {spam_count[user_id]} кликов до бана")
+            else:
+                await event.show_snackbar("⌛ Отвлекись на 10 минут")
             if spam_count[user_id] > 99:
                 await user_api.groups.ban(
                     group_id=225507433,
