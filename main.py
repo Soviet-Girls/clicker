@@ -52,10 +52,25 @@ async def ref_admin_message(message: Message):
     await message.answer(f"ref: {ref}, ref_source: {ref_source}")
 
 
+banned = []
+banned_refresh_count = 0
 
 # Обработка callback
 @bot.on.raw_event(GroupEventType.MESSAGE_EVENT, dataclass=MessageEvent)
 async def callback_handler(event: MessageEvent):
+    global banned_refresh_count
+
+    if banned_refresh_count > 99:
+        banlist = await bot.api.groups.get_banned(group_id=225507433)
+        for user in banlist.items:
+            if user.profile.id not in banned:
+                banned.append(user.profile.id)
+        banned_refresh_count = 0
+
+    if event.object.peer_id in banned:
+        logging.info(f"[BANNED] {event.object.peer_id} is banned!")
+        return
+
     if event.object.payload.get("command") == "play":
         await events.play.message(event)
     elif event.object.payload.get("command") == "mine":
@@ -91,6 +106,7 @@ async def callback_handler(event: MessageEvent):
         )
         await data.update_keyboard_version(event.object.peer_id)
     
+    banned_refresh_count += 1
 
 # Обработка вступления в группу
 @bot.on.raw_event(GroupEventType.GROUP_JOIN)
