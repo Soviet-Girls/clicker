@@ -84,4 +84,4 @@ async def check(event: MessageEvent):
         message=bot_message,
         random_id=random.randint(0, 2 ** 64)
     )
-    await event.answer("🔹 Выполнение проверено")
+    await event.show_snackbar("🔹 Выполнение проверено")
