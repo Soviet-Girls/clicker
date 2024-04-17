@@ -145,16 +145,12 @@ async def group_leave_handler(event):
         pass
     logging.info(f"[LEAVE] https://vk.com/gim225507433?sel={user_id}")
 
-likes = {}
 
 # Обработка лайка
 @bot.on.raw_event(GroupEventType.LIKE_ADD)
 async def like_add_handler(event):
-    print(event)
     user_id = event['object']['liker_id']
-    object_id = event['object']['object_id']
-    user_likes = likes.get(user_id, [])
-    if object_id in user_likes:
+    if event['object']['object_type'] != "post":
         return
     await data.change_score(user_id, 5000)
     try:
@@ -165,18 +161,13 @@ async def like_add_handler(event):
         )
     except Exception as e:
         pass
-    user_likes.append(object_id)
-    likes[user_id] = user_likes
 
-dislikes = {}
 
 # Обработка снятия лайка
 @bot.on.raw_event(GroupEventType.LIKE_REMOVE)
 async def like_remove_handler(event):
     user_id = event['object']['liker_id']
-    object_id = event['object']['object_id']
-    user_dislikes = dislikes.get(user_id, [])
-    if object_id in user_dislikes:
+    if event['object']['object_type'] != "post":
         return
     await data.change_score(user_id, -5000)
     try:
@@ -187,8 +178,6 @@ async def like_remove_handler(event):
         )
     except Exception as e:
         pass
-    user_dislikes.append(object_id)
-    dislikes[user_id] = user_dislikes
 
 # Обработка VK Pay
 @bot.on.message(CommandRule(["/vkpay"]))
