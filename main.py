@@ -145,41 +145,49 @@ async def group_leave_handler(event):
         pass
     logging.info(f"[LEAVE] https://vk.com/gim225507433?sel={user_id}")
 
-old_like_time = {}
+likes = {}
+
 # Обработка лайка
 @bot.on.raw_event(GroupEventType.LIKE_ADD)
 async def like_add_handler(event):
     user_id = event['object']['liker_id']
-    if old_like_time.get(user_id, 0) == event['object']['date']:
+    object_id = event['object']['object_id']
+    user_likes = likes.get(user_id, [])
+    if object_id in user_likes:
         return
-    old_like_time[user_id] = event['object']['date']
-    await data.change_score(user_id, 500)
+    await data.change_score(user_id, 5000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="🎉 Вы получили 500 SG₽ за лайк!",
+            message="🎉 Вы получили 5000 SG₽ за лайк!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
         pass
+    user_likes.append(object_id)
+    likes[user_id] = user_likes
 
-old_dislike_time = {}
+dislikes = {}
+
 # Обработка снятия лайка
 @bot.on.raw_event(GroupEventType.LIKE_REMOVE)
 async def like_remove_handler(event):
     user_id = event['object']['liker_id']
-    if old_dislike_time.get(user_id, 0) == event['object']['date']:
+    object_id = event['object']['object_id']
+    user_dislikes = dislikes.get(user_id, [])
+    if object_id in user_dislikes:
         return
-    old_dislike_time[user_id] = event['object']['date']
-    await data.change_score(user_id, -500)
+    await data.change_score(user_id, -5000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="😢 Вы потеряли 500 SG₽ за снятие лайка!",
+            message="😢 Вы потеряли 5000 SG₽ за снятие лайка!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
         pass
+    user_dislikes.append(object_id)
+    dislikes[user_id] = user_dislikes
 
 # Обработка VK Pay
 @bot.on.message(CommandRule(["/vkpay"]))
