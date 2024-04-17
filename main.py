@@ -150,6 +150,7 @@ likes = {}
 # Обработка лайка
 @bot.on.raw_event(GroupEventType.LIKE_ADD)
 async def like_add_handler(event):
+    print(event)
     user_id = event['object']['liker_id']
     object_id = event['object']['object_id']
     user_likes = likes.get(user_id, [])
