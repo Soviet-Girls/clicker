@@ -56,7 +56,7 @@ async def message(event: MessageEvent):
         if tm - first_click > 1200:
             spam_count[user_id] = spam_count.get(user_id, 0) + 1
             if spam_count[user_id] > 50:
-                await event.show_snackbar(f"⛔ {spam_count[user_id]} кликов до бана")
+                await event.show_snackbar(f"⛔ {100-spam_count[user_id]} кликов до бана")
             else:
                 await event.show_snackbar("⌛ Отвлекись на 10 минут")
             if spam_count[user_id] > 99:
