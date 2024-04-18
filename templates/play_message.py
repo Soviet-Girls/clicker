@@ -8,7 +8,7 @@ import data
 async def generate(user_id: int, score: int = -1) -> str:
     if score == -1:
         score = await data.get_score(user_id)
-    level = await data.get_level(score)
+    level = await data.get_level(user_id)
     score = "{:,}".format(score).replace(",", " ")
     bot_message = f"💰 Твой счёт: {score} SG₽"
     bot_message += f"\n📊 Уровень: {level}"
