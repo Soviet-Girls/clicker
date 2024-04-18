@@ -26,7 +26,7 @@ async def message(event: MessageEvent):
     bonus = cpc * 5
     try:
         await data.change_score(user_id, bonus)
-        await event.show_snackbar(f"🚀 {score} (+{bonus})")
+        await event.show_snackbar(f"🚀 {score+bonus} (+{bonus})")
         bot_message, kb = await play_message.generate(user_id)
         await bot.api.messages.edit(
             peer_id=user_id,
