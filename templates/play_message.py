@@ -8,8 +8,10 @@ import data
 async def generate(user_id: int, score: int = -1) -> str:
     if score == -1:
         score = await data.get_score(user_id)
+    level = await data.get_level(score)
     score = "{:,}".format(score).replace(",", " ")
     bot_message = f"💰 Твой счёт: {score} SG₽"
+    bot_message += f"\n📊 Уровень: {level}"
     sleep_time = data.get_sleep_time()
     if sleep_time == 0:
         bot_message += "\n\n⌛ Добыча доступна каждую секунду."
