@@ -36,8 +36,8 @@ async def start_message(message: Message):
                 return
             await data.set_ref(message.from_id, ref)
             await data.change_ref_count(ref, 1)
-            await data.change_score(ref, 10000)
-            bot_message = "🎉 Вы получили 10 000 SG₽ за приглашение друга!"
+            await data.change_score(ref, 20000)
+            bot_message = "🎉 Вы получили 20 000 SG₽ за приглашение друга!"
             logging.info(f"[REF] {ref} invited {message.from_id}")
             await bot.api.messages.send(
                 user_id=ref,
@@ -50,6 +50,11 @@ async def ref_admin_message(message: Message):
     ref = message.ref
     ref_source = message.ref_source
     await message.answer(f"ref: {ref}, ref_source: {ref_source}")
+
+
+@bot.on.message(CommandRule(["/subs_bonus"]))
+async def subs_bonus(message: Message):
+    await events.subs_bonus.send(message)
 
 
 banned = []
@@ -115,12 +120,12 @@ async def group_join_handler(event):
     user_id = event['object']['user_id']
     bonus = await data.get_invite_bonus(user_id)
     if bonus is False:
-        await data.change_score(user_id, 1000)
+        await data.change_score(user_id, 200000)
         await data.set_invite_bonus(user_id, True)
         try:
             await bot.api.messages.send(
                 user_id=user_id,
-                message="🎉 Вы получили 10 000 SG₽ за вступление в группу!",
+                message="🎉 Вы получили 200 000 SG₽ за вступление в группу!",
                 random_id=random.randint(0, 2 ** 64)
             )
         except Exception as e:
@@ -134,11 +139,11 @@ async def group_leave_handler(event):
     bonus = await data.get_invite_bonus(user_id)
     if bonus is True:
         await data.set_invite_bonus(user_id, False)
-        await data.change_score(user_id, -1000)
+        await data.change_score(user_id, -200000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="😢 Вы потеряли бонусные 10 000 SG₽ за выход из группы!",
+            message="😢 Вы потеряли бонусные 200 000 SG₽ за выход из группы!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
@@ -152,11 +157,11 @@ async def like_add_handler(event):
     user_id = event['object']['liker_id']
     if event['object']['object_type'] != "post":
         return
-    await data.change_score(user_id, 5000)
+    await data.change_score(user_id, 10000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="🎉 Вы получили 5000 SG₽ за лайк!",
+            message="🎉 Вы получили 10 000 SG₽ за лайк!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
@@ -169,11 +174,11 @@ async def like_remove_handler(event):
     user_id = event['object']['liker_id']
     if event['object']['object_type'] != "post":
         return
-    await data.change_score(user_id, -5000)
+    await data.change_score(user_id, -10000)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="😢 Вы потеряли 5000 SG₽ за снятие лайка!",
+            message="😢 Вы потеряли 10 000 SG₽ за снятие лайка!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
