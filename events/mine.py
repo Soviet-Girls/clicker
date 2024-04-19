@@ -43,10 +43,10 @@ async def message(event: MessageEvent):
         automine_status = await data.get_automine_status(user_id)
         if tm_diff > 600:
             if automine_status:
+                if tm_diff > 86400:
+                    tm_diff = 86400
                 new_cpc = int(tm_diff /2 * cpc / 100)
-                if new_cpc > 10000:
-                    new_cpc = 10000
-                elif new_cpc < 1:
+                if new_cpc < 1:
                     new_cpc = 1
                 cpc += new_cpc
             first_clicks[user_id] = tm
