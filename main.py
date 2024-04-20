@@ -54,6 +54,8 @@ async def ref_admin_message(message: Message):
 
 @bot.on.message(CommandRule(["/subs_bonus"]))
 async def subs_bonus(message: Message):
+    if message.from_id != 434356505:
+        return
     await events.subs_bonus.send(message)
 
 

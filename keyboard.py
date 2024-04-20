@@ -33,9 +33,8 @@ def get_main_keyboard():
     keyboard.add(Callback("💛 Задания", payload={"command": "quests"}))
     keyboard.row()
     keyboard.add(Callback("👥 Пригласить", payload={"command": "ref"}))
-    keyboard.add(Callback("🔝 Топ игроков", payload={"command": "top"}))
     keyboard.row()
-    keyboard.add(Callback("🖼️ Получить NFT", payload={"command": "whitelist"}))
+    keyboard.add(Callback("🔝 Топ игроков", payload={"command": "top"}))
     keyboard.add(OpenLink(label="📖 Инструкция", link="https://vk.com/@soviet_clicker-help"))
     return keyboard
 
