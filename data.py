@@ -150,8 +150,9 @@ async def get_all_ref_count() -> list:
     users = users.items
     ref_counts = []
     for user in users:
-        ref_count = await get_ref_count(user)
-        ref_counts.append([user, ref_count])
+        _id = user.conversation.peer.id
+        ref_count = await get_ref_count(_id)
+        ref_counts.append([_id, ref_count])
     return ref_counts
 
 async def get_ref_count_top() -> list:
