@@ -17,6 +17,7 @@ spam_count = {}
 async def message(event: MessageEvent):
     user_id = event.object.peer_id
     tm_last = await data.get_last_mine(user_id)
+    donut = await data.is_donut(user_id)
     tm = int(time.time())
     first_click = first_clicks.get(user_id, -1)
     if first_click == -1:
@@ -53,13 +54,17 @@ async def message(event: MessageEvent):
             first_click = tm
         if sleep_time > 0:
             await asyncio.sleep(sleep_time)
-        if tm - first_click > 1200:
+        if donut:
+            time_ban_diff = 3600
+        else:
+            time_ban_diff = 1200
+        if tm - first_click > time_ban_diff:
             spam_count[user_id] = spam_count.get(user_id, 0) + 1
-            if spam_count[user_id] > 50:
+            if spam_count[user_id] > 50 and not donut:
                 await event.show_snackbar(f"⛔ {100-spam_count[user_id]} кликов до бана")
             else:
                 await event.show_snackbar("⌛ Отвлекись на 10 минут")
-            if spam_count[user_id] > 99:
+            if spam_count[user_id] > 99 and not donut:
                 await user_api.groups.ban(
                     group_id=225507433,
                     owner_id=user_id,

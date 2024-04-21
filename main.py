@@ -209,6 +209,10 @@ async def vkpay_transaction_handler(event):
         )
     except Exception as e:
         raise e
+    
+@bot.on.raw_event([GroupEventType.DONUT_SUBSCRIPTION_CREATE, GroupEventType.DONUT_SUBSCRIPTION_EXPIRED, GroupEventType.DONUT_SUBSCRIPTION_CANCELLED])
+async def donut_subscription_handler(event):
+    await data.update_donuts()
 
 @bot.on.message(WalletRule())
 async def wallet_message(message: Message):
@@ -225,6 +229,13 @@ async def save_message(message: Message):
     await data.save_last_mines()
     await data.save_top()
     await message.answer("📦 Данные сохранены!")
+
+@bot.on.message(text='/donut')
+async def donut_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await data.update_donuts()
+    await message.answer("🎉 Донатеры обновлены!")
 
 @bot.on.message(text='/top')
 async def top_refresh_message(message: Message):
@@ -269,6 +280,7 @@ async def save_scores():
         await data.save_scores()
         await data.save_last_mines()
         await data.save_top()
+        await data.update_donuts()
         await widget.update()
         response = await bot.api.request("groups.getOnlineStatus", {"group_id": 225507433})
         if response['response']["status"] != "online":

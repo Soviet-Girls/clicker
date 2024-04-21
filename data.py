@@ -38,6 +38,21 @@ async def save_last_mines() -> None:
                     break
 
 
+# donut
+
+donuts = []
+
+async def update_donuts() -> None:
+    global donuts
+    donuts = await bot.api.groups.get_members(group_id=225507433, filter="donut")
+    donuts = [donut.user_id for donut in donuts.items]
+
+async def is_donut(user_id: int) -> bool:
+    if donuts == []:
+        await update_donuts()
+    return user_id in donuts
+
+
 # топ 5 игроков (пары [user_id, score])
 top = []
 
@@ -142,6 +157,9 @@ async def get_score(user_id: int) -> int:
 
 async def change_score(user_id: int, points: int) -> None:
     ref = await get_ref(user_id)
+    donut = await is_donut(user_id)
+    if points > 0 and donut:
+        points *= 2
     if ref != 0:
         if points > 99:
             ref_score = await get_score(ref)

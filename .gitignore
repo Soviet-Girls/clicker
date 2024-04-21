@@ -4,3 +4,5 @@ __pycache__
 
 wallets_regular.txt
 wallets_top5.txt
+
+.vscode/
