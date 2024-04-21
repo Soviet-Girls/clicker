@@ -83,6 +83,8 @@ async def message(event: MessageEvent):
         raise e
     score = await data.get_score(user_id)
     _rm = refresh_message.get(user_id, 0)
+    if donut:
+        cpc = cpc * 2
     try:
         await event.show_snackbar(f"💸 {score} (+{cpc})")
     except Exception as e:
