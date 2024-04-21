@@ -146,8 +146,15 @@ async def change_ref_count(user_id: int, count: int) -> None:
     refs_count[user_id] = ref_count
 
 async def get_all_ref_count() -> list:
-    users = await bot.api.messages.get_conversations()
-    users = users.items
+    offset_multiplier = 0
+    users = await bot.api.messages.get_conversations(count=200)
+    all_users = users.items
+    for _ in range(users.count // 200):
+        offset_multiplier += 1
+        users = await bot.api.messages.get_conversations(count=200, offset=offset_multiplier*200)
+        # прибавляем к списку новые элементы
+        all_users += users.items
+    users = all_users
     ref_counts = []
     for user in users:
         _id = user.conversation.peer.id
