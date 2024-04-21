@@ -45,7 +45,7 @@ donuts = []
 async def update_donuts() -> None:
     global donuts
     donuts = await bot.api.groups.get_members(group_id=225507433, filter="donut")
-    donuts = [donut.user_id for donut in donuts.items]
+    donuts = [donut for donut in donuts.items]
 
 async def is_donut(user_id: int) -> bool:
     if donuts == []:
