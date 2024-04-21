@@ -63,3 +63,8 @@ def get_quest_keyboard():
     keyboard = Keyboard(inline=True)
     keyboard.add(Callback("🔹 Проверить выполнение", payload={"command": "check_quest"}))
     return keyboard
+
+def ref_race_keyboard():
+    keyboard = Keyboard(inline=True)
+    keyboard.add(OpenLink(label="🏁 Получить награды!", link="https://vk.com/wall-225507433_41"))
+    return keyboard

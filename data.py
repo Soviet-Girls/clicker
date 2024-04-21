@@ -145,6 +145,20 @@ async def change_ref_count(user_id: int, count: int) -> None:
     await bot.api.storage.set("ref_count"+ver, value=str(ref_count), user_id=user_id)
     refs_count[user_id] = ref_count
 
+async def get_all_ref_count() -> list:
+    users = await bot.api.messages.get_conversations()
+    users = users.items
+    ref_counts = []
+    for user in users:
+        ref_count = await get_ref_count(user)
+        ref_counts.append([user, ref_count])
+    return ref_counts
+
+async def get_ref_count_top() -> list:
+    ref_counts = await get_all_ref_count()
+    ref_counts = sorted(ref_counts, key=lambda x: x[1], reverse=True)[:5]
+    return ref_counts
+
 # score
 
 async def get_score(user_id: int) -> int:
