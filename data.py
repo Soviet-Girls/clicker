@@ -194,7 +194,7 @@ async def change_score(user_id: int, points: int) -> int:
     score = await get_score(user_id)
     score += points
     scores[user_id] = score
-    return score
+    return points
 
 
 # coins per click
