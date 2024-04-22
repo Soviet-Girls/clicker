@@ -38,7 +38,7 @@ async def start_message(message: Message):
             await data.change_ref_count(ref, 1)
             score = await data.change_score(ref, 20000)
             score = "{:,}".format(score).replace(",", " ")
-            bot_message = "🎉 Вы получили {score} SG₽ за приглашение друга!"
+            bot_message = f"🎉 Вы получили {score} SG₽ за приглашение друга!"
             logging.info(f"[REF] {ref} invited {message.from_id}")
             await bot.api.messages.send(
                 user_id=ref,
@@ -129,7 +129,7 @@ async def group_join_handler(event):
         try:
             await bot.api.messages.send(
                 user_id=user_id,
-                message="🎉 Вы получили {score} SG₽ за вступление в группу!",
+                message=f"🎉 Вы получили {score} SG₽ за вступление в группу!",
                 random_id=random.randint(0, 2 ** 64)
             )
         except Exception as e:
@@ -166,7 +166,7 @@ async def like_add_handler(event):
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="🎉 Вы получили {score} SG₽ за лайк!",
+            message=f"🎉 Вы получили {score} SG₽ за лайк!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
