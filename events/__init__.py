@@ -10,5 +10,6 @@ from events import (
     upgrades,
     whitelist,
     quests,
-    subs_bonus
+    subs_bonus,
+    ad
 )

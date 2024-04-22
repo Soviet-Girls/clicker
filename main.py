@@ -269,6 +269,12 @@ async def sleep_message(message: Message):
     data.set_sleep_time(sleep_time)
     await message.answer(f"💤 Установлено время сна {sleep_time} сек")
 
+@bot.on.message(CommandRule(["/ad"]))
+async def ad_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await events.ad.send(message)
+
 @bot.on.message(CommandRule(["/widget"]))
 async def widget_message(message: Message):
     if message.from_id != 434356505:
