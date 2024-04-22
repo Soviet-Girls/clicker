@@ -31,6 +31,7 @@ def save_wallet(wallet, status):
 
 # Обработка команды "🖼️ Получить NFT"
 async def message(event: MessageEvent):
+    return
     await event.show_snackbar("🖼️ Получить NFT")
     user_id = event.object.peer_id
     top = await data.get_top()

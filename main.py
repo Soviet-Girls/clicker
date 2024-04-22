@@ -36,8 +36,9 @@ async def start_message(message: Message):
                 return
             await data.set_ref(message.from_id, ref)
             await data.change_ref_count(ref, 1)
-            await data.change_score(ref, 20000)
-            bot_message = "🎉 Вы получили 20 000 SG₽ за приглашение друга!"
+            score = await data.change_score(ref, 20000)
+            score = "{:,}".format(score).replace(",", " ")
+            bot_message = "🎉 Вы получили {score} SG₽ за приглашение друга!"
             logging.info(f"[REF] {ref} invited {message.from_id}")
             await bot.api.messages.send(
                 user_id=ref,
@@ -122,12 +123,13 @@ async def group_join_handler(event):
     user_id = event['object']['user_id']
     bonus = await data.get_invite_bonus(user_id)
     if bonus is False:
-        await data.change_score(user_id, 200000)
+        score = await data.change_score(user_id, 200000)
+        score = "{:,}".format(score).replace(",", " ")
         await data.set_invite_bonus(user_id, True)
         try:
             await bot.api.messages.send(
                 user_id=user_id,
-                message="🎉 Вы получили 200 000 SG₽ за вступление в группу!",
+                message="🎉 Вы получили {score} SG₽ за вступление в группу!",
                 random_id=random.randint(0, 2 ** 64)
             )
         except Exception as e:
@@ -159,11 +161,12 @@ async def like_add_handler(event):
     user_id = event['object']['liker_id']
     if event['object']['object_type'] != "post":
         return
-    await data.change_score(user_id, 10000)
+    score = await data.change_score(user_id, 10000)
+    score = "{:,}".format(score).replace(",", " ")
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message="🎉 Вы получили 10 000 SG₽ за лайк!",
+            message="🎉 Вы получили {score} SG₽ за лайк!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
@@ -200,11 +203,11 @@ async def vkpay_transaction_handler(event):
     old_payment_time[event['object']['from_id']] = event['object']['date']
     user_id = event['object']['from_id']
     amount = event['object']['amount'] / 2
-    await data.change_score(user_id, amount)
+    score = await data.change_score(user_id, amount)
     try:
         await bot.api.messages.send(
             user_id=user_id,
-            message=f"🎉 Вы получили {amount*2} SG₽!",
+            message=f"🎉 Вы получили {score*2} SG₽!",
             random_id=random.randint(0, 2 ** 64)
         )
     except Exception as e:
@@ -250,8 +253,8 @@ async def bonus_message(message: Message):
         return
     target_id = int(message.text.split()[1])
     bonus = int(message.text.split()[2])
-    await data.change_score(target_id, bonus)
-    await message.answer(f"🎉 Выдано {bonus} SG₽ пользователю {target_id}")
+    score = await data.change_score(target_id, bonus)
+    await message.answer(f"🎉 Выдано {score} SG₽ пользователю {target_id}")
     await bot.api.messages.send(
         user_id=target_id,
         message=f"🎉 Вы получили бонус в размере {bonus} SG₽!",

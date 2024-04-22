@@ -42,7 +42,7 @@ async def message(event: MessageEvent):
         for i, user in enumerate(top):
             if user[0] == event.object.peer_id:
                 count = user[1]
-                bot_message += f"\n\nВы находитесь на {i+1} месте. Приглашено: {count}.\n"
+                bot_message += f"\nВы находитесь на {i+1} месте. Приглашено: {count}.\n"
                 break
     await bot.api.messages.send(
         user_id=event.object.peer_id,

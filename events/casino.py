@@ -18,7 +18,7 @@ async def message(event: MessageEvent):
     await data.change_score(user_id, -1000)
     prize = random.randint(0, 1000)
     if prize == 0:
-        await data.change_score(user_id, 100000)
+        score = await data.change_score(user_id, 100000)
         user_id = event.object.peer_id
         level = await data.get_level(user_id)
         price, income = data.price_count(level)
@@ -42,20 +42,24 @@ async def message(event: MessageEvent):
                 if _i > 5:
                     raise e
                 await asyncio.sleep(1)
-        await event.show_snackbar("🎉 Джекпот! Вы выиграли 100 000 SG₽ и улучшение клика!")
+        score = "{:,}".format(score).replace(",", " ")
+        await event.show_snackbar(f"🎉 Джекпот! Вы выиграли {score} SG₽ и улучшение клика!")
         logging.info(f"[CASINO] Jackpot! https://vk.com/gim225507433?sel={user_id}")
     elif prize < 50:
-        await data.change_score(user_id, 10000)
-        await event.show_snackbar("🎉 Вы выиграли 10 000 SG₽!")
-        logging.info(f"[CASINO] 10 000 SG₽! https://vk.com/gim225507433?sel={user_id}")
+        score = await data.change_score(user_id, 10000)
+        score = "{:,}".format(score).replace(",", " ")
+        await event.show_snackbar(f"🎉 Вы выиграли {score} SG₽!")
+        logging.info(f"[CASINO] {score} SG₽! https://vk.com/gim225507433?sel={user_id}")
     elif prize < 100:
-        await data.change_score(user_id, 1000)
-        await event.show_snackbar("🎉 Вы выиграли 1 000 SG₽!")
-        logging.info(f"[CASINO] 1 000 SG₽! https://vk.com/gim225507433?sel={user_id}")
+        score = await data.change_score(user_id, 1000)
+        score = "{:,}".format(score).replace(",", " ")
+        await event.show_snackbar(f"🎉 Вы выиграли {score} SG₽!")
+        logging.info(f"[CASINO] {score} SG₽! https://vk.com/gim225507433?sel={user_id}")
     elif prize < 700:
-        await data.change_score(user_id, 500)
-        await event.show_snackbar("🎉 Вы выиграли 500 SG₽!")
-        logging.info(f"[CASINO] 500 SG₽! https://vk.com/gim225507433?sel={user_id}")
+        score = await data.change_score(user_id, 500)
+        score = "{:,}".format(score).replace(",", " ")
+        await event.show_snackbar(f"🎉 Вы выиграли {score} SG₽!")
+        logging.info(f"[CASINO] {score} SG₽! https://vk.com/gim225507433?sel={user_id}")
     else:
         await event.show_snackbar("😢 Вы ничего не выиграли")
         logging.info(f"[CASINO] Nothing! https://vk.com/gim225507433?sel={user_id}")

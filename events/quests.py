@@ -71,6 +71,10 @@ async def check(event: MessageEvent):
             count += 1
             reward_sum += quest["reward"]
             logging.info(f"[QUESTS] Cmpleted quest {quest_id}! https://vk.com/gim225507433?sel={user_id}")
+    
+    is_donut = await data.is_donut(user_id)
+    if is_donut:
+        reward_sum = reward_sum * 2
 
     if count == 0:
         bot_message = "🤯 Вы не выполнили ни одного задания."

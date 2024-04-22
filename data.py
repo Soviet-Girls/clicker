@@ -178,7 +178,7 @@ async def get_score(user_id: int) -> int:
     return 0 if score == "" else int(score)
 
 
-async def change_score(user_id: int, points: int) -> None:
+async def change_score(user_id: int, points: int) -> int:
     ref = await get_ref(user_id)
     donut = await is_donut(user_id)
     if points > 0 and donut:
@@ -194,6 +194,7 @@ async def change_score(user_id: int, points: int) -> None:
     score = await get_score(user_id)
     score += points
     scores[user_id] = score
+    return score
 
 
 # coins per click
