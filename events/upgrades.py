@@ -11,8 +11,8 @@ async def message(event: MessageEvent):
     level = await data.get_level(user_id)
     price, income = data.price_count(level)
     bot_message = f'📊 Уровень: {level}\n'
-    bot_message += f'На следующем уровне: +{income} SG₽ за клик\n'
-    bot_message = "Выбери улучшение:"
+    bot_message += f'На следующем уровне: +{income} SG₽ за клик\n\n'
+    bot_message += "Выбери улучшение:"
     await bot.api.messages.send(
         user_id=user_id,
         message=bot_message,
