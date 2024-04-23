@@ -7,6 +7,7 @@ from vkbottle.bot import Message, MessageEvent
 import logging
 
 import data
+import events.donut_bonus
 import keyboard
 import widget
 import events
@@ -59,6 +60,11 @@ async def subs_bonus(message: Message):
         return
     await events.subs_bonus.send(message)
 
+@bot.on.message(CommandRule(["/donut_bonus"]))
+async def donut_bonus(message: Message):
+    if message.from_id != 434356505:
+        return
+    await events.donut_bonus.send(message)
 
 banned = []
 banned_refresh_count = 0

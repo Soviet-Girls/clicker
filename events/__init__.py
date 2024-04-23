@@ -11,5 +11,6 @@ from events import (
     whitelist,
     quests,
     subs_bonus,
+    donut_bonus,
     ad
 )
