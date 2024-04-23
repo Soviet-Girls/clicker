@@ -23,7 +23,8 @@ async def send(message: Message):
         try:
             await bot.api.messages.send(
                 user_id=_id,
-                message=text,
+                message='',
+                attachment=text,
                 random_id=random.randint(0, 2 ** 64)
             )
             await asyncio.sleep(0.5)
