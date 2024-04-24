@@ -185,7 +185,11 @@ async def like_remove_handler(event):
     user_id = event['object']['liker_id']
     if event['object']['object_type'] != "post":
         return
-    await data.change_score(user_id, -10000)
+    if user_id in data.donuts:
+        score = -20000
+    else:
+        score = -10000
+    await data.change_score(user_id, score)
     try:
         await bot.api.messages.send(
             user_id=user_id,
