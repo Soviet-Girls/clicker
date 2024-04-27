@@ -250,6 +250,12 @@ async def donut_message(message: Message):
     await data.update_donuts()
     await message.answer("🎉 Донатеры обновлены!")
 
+@bot.on.message(text='/donut_wallets')
+async def donut_message(message: Message):
+    if message.from_id != 434356505:
+        return
+    await events.donut_wallets.send(message)
+
 @bot.on.message(text='/top')
 async def top_refresh_message(message: Message):
     if message.from_id != 434356505:

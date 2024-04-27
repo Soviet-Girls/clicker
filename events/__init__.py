@@ -12,5 +12,6 @@ from events import (
     quests,
     subs_bonus,
     donut_bonus,
+    donut_wallets,
     ad
 )
