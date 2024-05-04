@@ -8,7 +8,7 @@ async def send(message: Message):
     if message.from_id != 434356505:
         return
     text = message.text[4:]
-
+    offset_multiplier = 0
     users = await bot.api.messages.get_conversations(count=200)
     all_users = users.items
     for _ in range(users.count // 200):
